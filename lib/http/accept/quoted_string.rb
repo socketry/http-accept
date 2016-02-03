@@ -35,7 +35,8 @@ module HTTP
 				value.gsub!(/\\(.)/, '\1') 
 				
 				if normalize_whitespace
-					value.gsub!(/[\r\n]\s+/, ' ')
+					# LWS = [CRLF] 1*( SP | HT )
+					value.gsub!(/[\r\n]+\s+/, ' ')
 				end
 				
 				return value
