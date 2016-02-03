@@ -1,3 +1,5 @@
+#!/usr/bin/env rspec
+
 # Copyright, 2016, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,36 +20,14 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module HTTP
-	module Accept
-		# According to https://tools.ietf.org/html/rfc7231#appendix-C
-		TOKEN = /[!#$%&'*+\-.^_`|~0-9A-Z]+/i
-		QUOTED_STRING = /"(?:.(?!(?<!\\)"))*.?"/
-		
-		class QuotedString
-			def initialize(value)
-				@value = value
-			end
+require 'http/accept/quoted_string'
+
+module HTTP::Accept::QuotedStringSpec
+	describe HTTP::Accept::MediaTypes do
+		it "should ignore linear whitespace" do
+			quoted_string = HTTP::Accept::QuotedString.new(%Q{"Hello\r\n  World"})
 			
-			def unquote(normalize_whitespace = false)
-				value = @value[1...-1]
-				
-				value.gsub!(/\\(.)/, '\1') 
-				
-				if normalize_whitespace
-					value.gsub!(/[\r\n]\s+/, ' ')
-				end
-				
-				return value
-			end
-			
-			def to_str
-				unquote(true)
-			end
-			
-			def to_s
-				to_str
-			end
+			expect(quoted_string.to_s).to be == "Hello World"
 		end
 	end
 end
