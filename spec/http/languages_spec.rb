@@ -20,12 +20,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'http/accept/language'
+require 'http/accept/languages'
 
-module HTTP::Accept::LanguageSpec
-	describe HTTP::Accept::Language do
+module HTTP::Accept::LanguagesSpec
+	describe HTTP::Accept::Languages do
 		it "should parse basic header" do
-			languages = HTTP::Accept::Language.parse("da, en-gb;q=0.5, en;q=0.25")
+			languages = HTTP::Accept::Languages.parse("da, en-gb;q=0.5, en;q=0.25")
 			
 			expect(languages[0].locale).to be == "da"
 			expect(languages[0].quality_factor).to be == 1.0
@@ -38,7 +38,7 @@ module HTTP::Accept::LanguageSpec
 		end
 		
 		it "should order based on quality factor" do
-			languages = HTTP::Accept::Language.parse("en-gb;q=0.25, en;q=0.5, en-us")
+			languages = HTTP::Accept::Languages.parse("en-gb;q=0.25, en;q=0.5, en-us")
 			
 			expect(languages[0].locale).to be == "en-us"
 			expect(languages[1].locale).to be == "en"
@@ -46,7 +46,7 @@ module HTTP::Accept::LanguageSpec
 		end
 		
 		it "should accept wildcard language" do
-			languages = HTTP::Accept::Language.parse("*;q=0")
+			languages = HTTP::Accept::Languages.parse("*;q=0")
 			
 			expect(languages[0].locale).to be == "*"
 			expect(languages[0].quality_factor).to be == 0

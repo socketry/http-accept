@@ -26,7 +26,7 @@ require_relative 'accept/version'
 require_relative 'accept/media_types'
 
 # Accept-Language: header
-require_relative 'accept/language'
+require_relative 'accept/languages'
 
 module HTTP
 	module Accept

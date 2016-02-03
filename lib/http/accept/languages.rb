@@ -24,7 +24,7 @@ require_relative 'parse_error'
 
 module HTTP
 	module Accept
-		class Language
+		class Languages
 			LOCALE = /\*|[A-Z]{1,8}(-[A-Z]{1,8})*/i
 			QVALUE = /[0-9]+(\.[0-9]+)?/
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(;q=(?<q>#{QVALUE}))?/
