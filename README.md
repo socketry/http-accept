@@ -4,6 +4,10 @@ Provides a robust set of parsers for dealing with Accept and Accept-Language HTT
 
 Current `Accept-Encoding:` and `Accept-Charset:` are not supported. This is because they are not particularly useful headers, but PRs are welcome.
 
+[![Build Status](https://secure.travis-ci.org/ioquatix/http-accept.svg)](http://travis-ci.org/ioquatix/http-accept)
+[![Code Climate](https://codeclimate.com/github/ioquatix/http-accept.svg)](https://codeclimate.com/github/ioquatix/http-accept)
+[![Coverage Status](https://coveralls.io/repos/ioquatix/http-accept/badge.svg)](https://coveralls.io/r/ioquatix/http-accept)
+
 ## Installation
 
 Add this line to your application's Gemfile:
