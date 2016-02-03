@@ -27,7 +27,10 @@ module HTTP
 	module Accept
 		class Languages
 			LOCALE = /\*|[A-Z]{1,8}(-[A-Z]{1,8})*/i
-			QVALUE = /[0-9]+(\.[0-9]+)?/
+			
+			# https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9
+			QVALUE = /0(\.[0-9]{0,3})?|1(\.[0]{0,3})?/
+			
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(;q=(?<q>#{QVALUE}))?/
 			
 			class LanguageRange < Struct.new(:locale, :q)
@@ -46,6 +49,11 @@ module HTTP
 					end
 					
 					raise ParseError.new("Could not parse entire string!") unless scanner.eos?
+				end
+				
+				# If the user ask for 'en', this satisfies any language that begins with 'en-'
+				def prefix_of? other
+					other.start_with(locale)
 				end
 			end
 			
