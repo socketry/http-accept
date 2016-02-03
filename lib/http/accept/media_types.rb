@@ -22,6 +22,7 @@ require 'strscan'
 
 require_relative 'parse_error'
 require_relative 'quoted_string'
+require_relative 'sort'
 
 module HTTP
 	module Accept
@@ -66,7 +67,9 @@ module HTTP
 			def self.parse(text)
 				scanner = StringScanner.new(text)
 				
-				return MediaRange.parse(scanner).sort{|a, b| b.quality_factor <=> a.quality_factor}
+				media_types = MediaRange.parse(scanner)
+				
+				return Sort.by_quality_factor(media_types)
 			end
 		end
 	end

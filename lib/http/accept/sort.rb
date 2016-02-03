@@ -18,45 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require 'strscan'
-
-require_relative 'parse_error'
-require_relative 'sort'
-
 module HTTP
 	module Accept
-		class Languages
-			LOCALE = /\*|[A-Z]{1,8}(-[A-Z]{1,8})*/i
-			QVALUE = /[0-9]+(\.[0-9]+)?/
-			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(;q=(?<q>#{QVALUE}))?/
-			
-			class LanguageRange < Struct.new(:locale, :q)
-				def quality_factor
-					(q || 1.0).to_f
-				end
-				
-				def self.parse(scanner)
-					return to_enum(:parse, scanner) unless block_given?
-					
-					while scanner.scan(LANGUAGE_RANGE)
-						yield self.new(scanner[:locale], scanner[:q])
-						
-						# Are there more?
-						return unless scanner.scan(/\s*,\s*/)
-					end
-					
-					raise ParseError.new("Could not parse entire string!") unless scanner.eos?
-				end
-			end
-			
-			def self.parse(text)
-				scanner = StringScanner.new(text)
-				
-				languages = LanguageRange.parse(scanner)
-				
-				return Sort.by_quality_factor(languages)
+		module Sort
+			def self.by_quality_factor(items)
+				# We do this to get a stable sort:
+				items.sort_by.with_index{|object, index| [-object.quality_factor, index]}
 			end
 		end
 	end
 end
-

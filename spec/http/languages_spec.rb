@@ -51,5 +51,13 @@ module HTTP::Accept::LanguagesSpec
 			expect(languages[0].locale).to be == "*"
 			expect(languages[0].quality_factor).to be == 0
 		end
+		
+		it "should preserve relative order" do
+			languages = HTTP::Accept::Languages.parse("en, de;q=0.5, jp;q=0.5")
+			
+			expect(languages[0].locale).to be == "en"
+			expect(languages[1].locale).to be == "de"
+			expect(languages[2].locale).to be == "jp"
+		end
 	end
 end
