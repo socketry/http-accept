@@ -1,6 +1,8 @@
 # HTTP::Accept
 
-Provides a robust set of parsers for dealing with Accept and Accept-Language HTTP headers. 
+Provides a robust set of parsers for dealing with Accept and Accept-Language HTTP headers.
+
+Current `Accept-Encoding:` and `Accept-Charset:` are not supported. This is because they are not particularly useful headers, but PRs are welcome.
 
 ## Installation
 
