@@ -25,11 +25,31 @@ require 'http/accept/language'
 module HTTP::Accept::LanguageSpec
 	describe HTTP::Accept::Language do
 		it "should parse basic header" do
-			languages = HTTP::Accept::Language.parse("da, en-gb;q=0.8, en;q=0.7")
+			languages = HTTP::Accept::Language.parse("da, en-gb;q=0.5, en;q=0.25")
 			
 			expect(languages[0].locale).to be == "da"
+			expect(languages[0].quality_factor).to be == 1.0
+			
 			expect(languages[1].locale).to be == "en-gb"
+			expect(languages[1].quality_factor).to be == 0.5
+			
 			expect(languages[2].locale).to be == "en"
+			expect(languages[2].quality_factor).to be == 0.25
+		end
+		
+		it "should order based on quality factor" do
+			languages = HTTP::Accept::Language.parse("en-gb;q=0.25, en;q=0.5, en-us")
+			
+			expect(languages[0].locale).to be == "en-us"
+			expect(languages[1].locale).to be == "en"
+			expect(languages[2].locale).to be == "en-gb"
+		end
+		
+		it "should accept wildcard language" do
+			languages = HTTP::Accept::Language.parse("*;q=0")
+			
+			expect(languages[0].locale).to be == "*"
+			expect(languages[0].quality_factor).to be == 0
 		end
 	end
 end
