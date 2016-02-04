@@ -60,4 +60,27 @@ module HTTP::Accept::LanguagesSpec
 			expect(languages[2].locale).to be == "jp"
 		end
 	end
+	
+	describe HTTP::Accept::Languages::Locales do
+		# Specified by the server, content localizations that are actually available:
+		let(:locales) {HTTP::Accept::Languages::Locales.new(["en-us", "en-nz", "en-au"])}
+		
+		it "should filter and expand the requested locales" do
+			# Provided by the client:
+			languages = HTTP::Accept::Languages.parse("en-au, en")
+			
+			# The localized content which is best for this user:
+			expect(locales & languages).to be == ["en-au", "en-us"]
+		end
+		
+		it "it should filter the requested locale" do
+			languages = HTTP::Accept::Languages.parse("en-au")
+			expect(locales & languages).to be == ["en-au"]
+		end
+		
+		it "it should expand the requested locale" do
+			languages = HTTP::Accept::Languages.parse("en")
+			expect(locales & languages).to be == ["en-us"]
+		end
+	end
 end

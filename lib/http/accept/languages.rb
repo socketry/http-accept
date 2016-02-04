@@ -33,6 +33,48 @@ module HTTP
 			
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(;q=(?<q>#{QVALUE}))?/
 			
+			# Provides an efficient data-structure for matching the Accept-Languages header to set of available locales according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
+			class Locales < Array
+				def self.expand(locale, into)
+					parts = locale.split('-')
+					
+					while parts.size > 0
+						key = parts.join('-')
+						
+						into[key] ||= locale
+						
+						parts.pop
+					end
+				end
+				
+				def initialize(names)
+					super(names)
+					
+					@patterns = {}
+					
+					self.each{|name| self.class.expand(name, @patterns)}
+					
+					self.freeze
+				end
+				
+				def freeze
+					@patterns.freeze
+					
+					super
+				end
+				
+				attr :patterns
+				
+				# Returns the intersection of others retaining order.
+				def & languages
+					languages.collect{|language_range| @patterns[language_range.locale]}.compact
+				end
+				
+				def include? locale_name
+					@patterns.include? locale_name
+				end
+			end
+			
 			class LanguageRange < Struct.new(:locale, :q)
 				def quality_factor
 					(q || 1.0).to_f
@@ -50,11 +92,6 @@ module HTTP
 					
 					raise ParseError.new("Could not parse entire string!") unless scanner.eos?
 				end
-				
-				# If the user ask for 'en', this satisfies any language that begins with 'en-'
-				def prefix_of? other
-					other.start_with(locale)
-				end
 			end
 			
 			def self.parse(text)
@@ -67,4 +104,3 @@ module HTTP
 		end
 	end
 end
-
