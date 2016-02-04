@@ -25,7 +25,7 @@ require_relative 'sort'
 
 module HTTP
 	module Accept
-		class Languages
+		module Languages
 			LOCALE = /\*|[A-Z]{1,8}(-[A-Z]{1,8})*/i
 			
 			# https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9

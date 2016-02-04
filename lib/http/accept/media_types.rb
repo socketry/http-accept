@@ -26,7 +26,7 @@ require_relative 'sort'
 
 module HTTP
 	module Accept
-		class MediaTypes
+		module MediaTypes
 			# According to https://tools.ietf.org/html/rfc7231#section-5.3.2
 			MIME_TYPE = /(#{TOKEN})\/(#{TOKEN})/
 			PARAMETER = /\s*;\s*(?<key>#{TOKEN})=((?<value>#{TOKEN})|(?<quoted_value>#{QUOTED_STRING}))/
