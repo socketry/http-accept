@@ -8,6 +8,14 @@ Current `Accept-Encoding:` and `Accept-Charset:` are not supported. This is beca
 [![Code Climate](https://codeclimate.com/github/ioquatix/http-accept.svg)](https://codeclimate.com/github/ioquatix/http-accept)
 [![Coverage Status](https://coveralls.io/repos/ioquatix/http-accept/badge.svg)](https://coveralls.io/r/ioquatix/http-accept)
 
+## Motivation
+
+I've been developing some tools for building RESTful endpoints and part of that involved versioning. After reviewing the options, I settled on using the `Accept: application/json;version=1` method [as outlined here](http://labs.qandidate.com/blog/2014/10/16/using-the-accept-header-to-version-your-api/).
+
+The `version=1` part of the `media-type` is a `parameter` as defined by [RFC7231 Section 3.1.1.1](https://tools.ietf.org/html/rfc7231#section-3.1.1.1). After reviewing several existing different options for parsing the `Accept:` header, I noticed a disturbing trend: `header.split(',')`. Because parameters may contain quoted strings which contain commas, this is clearly not an appropriate way to parse the header.
+
+I am concerned about correctness, security and performance. As such, I implemented this gem to provide a simple high level interface for both parsing and correctly interpreting these headers.
+
 ## Installation
 
 Add this line to your application's Gemfile:
