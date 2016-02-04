@@ -88,7 +88,7 @@ module HTTP
 						yield self.new(scanner[:locale], scanner[:q])
 						
 						# Are there more?
-						return unless scanner.scan(/\s*,\s*/)
+						break unless scanner.scan(/\s*,\s*/)
 					end
 					
 					raise ParseError.new("Could not parse entire string!") unless scanner.eos?

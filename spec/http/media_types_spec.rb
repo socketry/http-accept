@@ -41,6 +41,24 @@ module HTTP::Accept::MediaTypesSpec
 			expect(media_types[0].mime_type).to be == "foo/bar"
 			expect(media_types[0].parameters).to be == {'key' => "A,B,C"}
 		end
+		
+		
+		it "should not accept invalid input" do
+			[
+				"foo",
+				"foo/",
+				"foo/bar;",
+				"foo/bar;x",
+				"foo/bar;x=",
+				"foo/bar;x=\"",
+				"foo/bar;x=\"baz",
+				"foo/bar;x=",
+				";foo/bar",
+				",",
+			].each do |text|
+				expect{HTTP::Accept::MediaTypes.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			end
+		end
 	end
 	
 	describe HTTP::Accept::MediaTypes::Map do

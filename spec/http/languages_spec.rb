@@ -59,6 +59,15 @@ module HTTP::Accept::LanguagesSpec
 			expect(languages[1].locale).to be == "de"
 			expect(languages[2].locale).to be == "jp"
 		end
+		
+		it "should not accept invalid input" do
+			[
+				"en;f=1", "de;jp",
+				";", ","
+			].each do |text|
+				expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			end
+		end
 	end
 	
 	describe HTTP::Accept::Languages::Locales do
