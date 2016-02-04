@@ -91,5 +91,12 @@ module HTTP::Accept::LanguagesSpec
 			languages = HTTP::Accept::Languages.parse("en")
 			expect(locales & languages).to be == ["en-us"]
 		end
+		
+		it "should include all generic locales" do
+			expect(locales).to be_include "en-us"
+			expect(locales).to be_include "en-nz"
+			expect(locales).to be_include "en-au"
+			expect(locales).to be_include "en"
+		end
 	end
 end
