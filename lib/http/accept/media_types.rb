@@ -31,6 +31,57 @@ module HTTP
 			MIME_TYPE = /(#{TOKEN})\/(#{TOKEN})/
 			PARAMETER = /\s*;\s*(?<key>#{TOKEN})=((?<value>#{TOKEN})|(?<quoted_value>#{QUOTED_STRING}))/
 			
+			# Map a set of mime types to objects.
+			class Map
+				WILDCARD = '*'.freeze
+				
+				def initialize
+					@media_types = Hash.new{|h,k| h[k] = {}}
+					
+					# Primarily for implementing #freeze efficiently.
+					@all = []
+				end
+				
+				def freeze
+					@media_types.freeze
+					@media_types.each{|key,value| value.freeze}
+					
+					@all.freeze
+					@all.each(&:freeze)
+					
+					super
+				end
+				
+				# Given a list of content types (e.g. from browser_preferred_content_types), return the best converter.
+				def for(media_types)
+					media_types.each do |media_range|
+						type, subtype = media_range.split
+						
+						if object = @media_types[type][subtype]
+							return object, media_range
+						end
+					end
+					
+					return nil
+				end
+				
+				# Add a converter to the collection. A converter can be anything that responds to #content_type.
+				def << object
+					type, subtype = object.content_type.split('/')
+					
+					if @media_types.empty?
+						@media_types[WILDCARD][WILDCARD] = object
+					end
+					
+					if @media_types[type].empty?
+						@media_types[type][WILDCARD] = object
+					end
+					
+					@media_types[type][subtype] = object
+					@all << object
+				end
+			end
+			
 			class MediaRange < Struct.new(:mime_type, :parameters)
 				def quality_factor
 					parameters.fetch('q', 1.0).to_f
