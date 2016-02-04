@@ -32,5 +32,15 @@ module HTTP::Accept::MediaTypesSpec
 			expect(media_types[1].mime_type).to be == "text/html"
 			expect(media_types[1].parameters).to be == {'q' => '0.5'}
 		end
+		
+		it "should parse quoted strings correctly" do
+			# Many parsers use something like `header_value.split(',')` and you know from that point it's downhill.
+			
+			media_types = HTTP::Accept::MediaTypes.parse("foo/bar;key=\"A,B,C\"")
+			
+			expect(media_types.count).to be == 1
+			expect(media_types[0].mime_type).to be == "foo/bar"
+			expect(media_types[0].parameters).to be == {'key' => "A,B,C"}
+		end
 	end
 end

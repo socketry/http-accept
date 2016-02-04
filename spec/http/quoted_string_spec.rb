@@ -25,9 +25,9 @@ require 'http/accept/quoted_string'
 module HTTP::Accept::QuotedStringSpec
 	describe HTTP::Accept::MediaTypes do
 		it "should ignore linear whitespace" do
-			quoted_string = HTTP::Accept::QuotedString.new(%Q{"Hello\r\n  World"})
+			quoted_string = HTTP::Accept::QuotedString.unquote(%Q{"Hello\r\n  World"})
 			
-			expect(quoted_string.to_s).to be == "Hello World"
+			expect(quoted_string).to be == "Hello World"
 		end
 	end
 end

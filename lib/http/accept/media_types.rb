@@ -36,8 +36,12 @@ module HTTP
 					parameters.fetch('q', 1.0).to_f
 				end
 				
-				def self.parse(scanner)
-					return to_enum(:parse, scanner) unless block_given?
+				def split
+					@type, @subtype = mime_type.split('/')
+				end
+				
+				def self.parse(scanner, normalize_whitespace = true)
+					return to_enum(:parse, scanner, normalize_whitespace) unless block_given?
 					
 					while mime_type = scanner.scan(MIME_TYPE)
 						parameters = {}
@@ -48,7 +52,7 @@ module HTTP
 							if value = scanner[:value]
 								parameters[key] = value
 							elsif quoted_value = scanner[:quoted_value]
-								parameters[key] = QuotedString.new(quoted_value)
+								parameters[key] = QuotedString.unquote(quoted_value, normalize_whitespace)
 							else
 								raise ParseError.new("Could not parse parameter!")
 							end
@@ -64,10 +68,10 @@ module HTTP
 				end
 			end
 			
-			def self.parse(text)
+			def self.parse(text, normalize_whitespace = true)
 				scanner = StringScanner.new(text)
 				
-				media_types = MediaRange.parse(scanner)
+				media_types = MediaRange.parse(scanner, normalize_whitespace)
 				
 				return Sort.by_quality_factor(media_types)
 			end

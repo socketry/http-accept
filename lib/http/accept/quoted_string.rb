@@ -24,13 +24,11 @@ module HTTP
 		TOKEN = /[!#$%&'*+\-.^_`|~0-9A-Z]+/i
 		QUOTED_STRING = /"(?:.(?!(?<!\\)"))*.?"/
 		
-		class QuotedString
-			def initialize(value)
-				@value = value
-			end
-			
-			def unquote(normalize_whitespace = false)
-				value = @value[1...-1]
+		module QuotedString
+			# Unquote a "quoted-string" value according to https://tools.ietf.org/html/rfc7230#section-3.2.6
+			# It should already match the QUOTED_STRING pattern above by the parser.
+			def self.unquote(value, normalize_whitespace = true)
+				value = value[1...-1]
 				
 				value.gsub!(/\\(.)/, '\1') 
 				
@@ -40,14 +38,6 @@ module HTTP
 				end
 				
 				return value
-			end
-			
-			def to_str
-				unquote(true)
-			end
-			
-			def to_s
-				to_str
 			end
 		end
 	end
