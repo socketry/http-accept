@@ -26,7 +26,8 @@ require_relative 'sort'
 module HTTP
 	module Accept
 		module Languages
-			LOCALE = /\*|[A-Z]{1,8}(-[A-Z]{1,8})*/i
+			# https://tools.ietf.org/html/rfc3066#section-2.1
+			LOCALE = /\*|[A-Z]{1,8}(-[A-Z0-9]{1,8})*/i
 			
 			# https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9
 			QVALUE = /0(\.[0-9]{0,3})?|1(\.[0]{0,3})?/

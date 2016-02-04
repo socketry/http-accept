@@ -39,10 +39,10 @@ module HTTP::Accept::LanguagesSpec
 		
 		it "should order based on quality factor" do
 			languages = HTTP::Accept::Languages.parse("en-gb;q=0.25, en;q=0.5, en-us")
+			expect(languages.collect(&:locale)).to be == %w{en-us en en-gb}
 			
-			expect(languages[0].locale).to be == "en-us"
-			expect(languages[1].locale).to be == "en"
-			expect(languages[2].locale).to be == "en-gb"
+			languages = HTTP::Accept::Languages.parse("en-us,en-gb;q=0.8,en;q=0.6,es-419")
+			expect(languages.collect(&:locale)).to be == %w{en-us es-419 en-gb en}
 		end
 		
 		it "should accept wildcard language" do
