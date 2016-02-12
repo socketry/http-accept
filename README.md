@@ -77,7 +77,7 @@ You can parse the incoming `Accept-Language:` header:
 
 	expect(languages[0].locale).to be == "da"
 	expect(languages[1].locale).to be == "en-gb"
-	expect(languages[2].locale).to be == "en"`
+	expect(languages[2].locale).to be == "en"
 
 Normally, you'd want to match the languages against some set of available localizations:
 
