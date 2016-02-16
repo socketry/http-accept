@@ -57,8 +57,11 @@ module HTTP
 					media_types.each do |media_range|
 						type, subtype = media_range.split
 						
-						if object = @media_types[type][subtype]
-							return object, media_range
+						# TODO: Could be improved using dig?
+						if major_type = @media_types.fetch(type, nil)
+							if object = major_type.fetch(subtype, nil)
+								return object, media_range
+							end
 						end
 					end
 					
