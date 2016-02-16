@@ -43,6 +43,14 @@ module HTTP
 				end.join
 			end
 			
+			def === other
+				if other.is_a? self.class
+					super
+				else
+					return self.mime_type === other
+				end
+			end
+			
 			def to_s
 				@to_s || "#{mime_type}#{parameters_string}"
 			end

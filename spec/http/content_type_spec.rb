@@ -27,6 +27,14 @@ module HTTP::Accept::ContentTypeSpec
 		it "should format simple mime type" do
 			expect(subject.to_s).to be == "text/plain"
 		end
+		
+		it "can compare with string" do
+			expect(subject).to be === "text/plain"
+		end
+		
+		it "can compare with self" do
+			expect(subject).to be === subject
+		end
 	end
 	
 	RSpec.describe HTTP::Accept::ContentType.new("text/plain", charset: 'utf-8') do
