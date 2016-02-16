@@ -18,36 +18,36 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require_relative 'quoted_string'
+
 module HTTP
 	module Accept
-		# According to https://tools.ietf.org/html/rfc7231#appendix-C
-		TOKEN = /[!#$%&'*+\-.^_`|~0-9A-Z]+/i
-		QUOTED_STRING = /"(?:.(?!(?<!\\)"))*.?"/
-		
-		module QuotedString
-			# Unquote a "quoted-string" value according to https://tools.ietf.org/html/rfc7230#section-3.2.6
-			# It should already match the QUOTED_STRING pattern above by the parser.
-			def self.unquote(value, normalize_whitespace = true)
-				value = value[1...-1]
+		class ContentType < Struct.new(:mime_type, :parameters)
+			def initialize(mime_type, parameters = {})
+				@to_s = nil
 				
-				value.gsub!(/\\(.)/, '\1') 
-				
-				if normalize_whitespace
-					# LWS = [CRLF] 1*( SP | HT )
-					value.gsub!(/[\r\n]+\s+/, ' ')
-				end
-				
-				return value
+				super
 			end
 			
-			# Quote a string if required. Doesn't handle newlines correctly currently.
-			def self.quote(value, force = false)
-				if value =~ /"/ or force
-					"\"#{value.gsub(/["\\]/, "\\\\\\0")}\""
-				else
-					return value
-				end
+			def freeze
+				@to_s ||= to_s
+				
+				super
 			end
+			
+			def parameters_string
+				return '' if parameters.empty?
+				
+				parameters.collect do |key, value|
+					"; #{key.to_s}=#{QuotedString.quote(value.to_s)}"
+				end.join
+			end
+			
+			def to_s
+				@to_s || "#{mime_type}#{parameters_string}"
+			end
+			
+			alias to_str to_s
 		end
 	end
 end
