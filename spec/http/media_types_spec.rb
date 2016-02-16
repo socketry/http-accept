@@ -24,11 +24,20 @@ require 'http/accept/media_types'
 
 module HTTP::Accept::MediaTypesSpec
 	describe HTTP::Accept::MediaTypes do
-		it "should parse basic header" do
-			media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json; version=1")
+		it "should parse basic header with multiple parameters" do
+			media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json")
 			
 			expect(media_types[0].mime_type).to be == "application/json"
-			expect(media_types[0].parameters).to be == {'version' => '1'}
+			expect(media_types[0].parameters).to be == {}
+			expect(media_types[1].mime_type).to be == "text/html"
+			expect(media_types[1].parameters).to be == {'q' => '0.5'}
+		end
+		
+		it "should parse basic header with multiple parameters" do
+			media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json;q=1.0; version=1")
+			
+			expect(media_types[0].mime_type).to be == "application/json"
+			expect(media_types[0].parameters).to be == {'q' => '1.0', 'version' => '1'}
 			expect(media_types[1].mime_type).to be == "text/html"
 			expect(media_types[1].parameters).to be == {'q' => '0.5'}
 		end
