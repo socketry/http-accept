@@ -18,44 +18,19 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+require_relative 'media_types'
 require_relative 'quoted_string'
 
 module HTTP
 	module Accept
-		class ContentType < Struct.new(:mime_type, :parameters)
+		# A content type is different from a media range, in that a content type should not have any wild cards.
+		class ContentType < MediaTypes::MediaRange
 			def initialize(mime_type, parameters = {})
-				@to_s = nil
+				# We do some basic validation here:
+				raise ArgumentError.new("#{self.class} can not have wildcards: #{mime_type}") if mime_type.include? '*'
 				
 				super
 			end
-			
-			def freeze
-				@to_s ||= to_s
-				
-				super
-			end
-			
-			def parameters_string
-				return '' if parameters.empty?
-				
-				parameters.collect do |key, value|
-					"; #{key.to_s}=#{QuotedString.quote(value.to_s)}"
-				end.join
-			end
-			
-			def === other
-				if other.is_a? self.class
-					super
-				else
-					return self.mime_type === other
-				end
-			end
-			
-			def to_s
-				@to_s || "#{mime_type}#{parameters_string}"
-			end
-			
-			alias to_str to_s
 		end
 	end
 end

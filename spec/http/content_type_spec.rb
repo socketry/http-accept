@@ -23,6 +23,12 @@
 require 'http/accept/content_type'
 
 module HTTP::Accept::ContentTypeSpec
+	RSpec.describe HTTP::Accept::ContentType do
+		it "should raise argument error if constructed with wildcard" do
+			expect{HTTP::Accept::ContentType.new('*/*')}.to raise_error(ArgumentError)
+		end
+	end
+	
 	RSpec.describe HTTP::Accept::ContentType.new("text/plain") do
 		it "should format simple mime type" do
 			expect(subject.to_s).to be == "text/plain"

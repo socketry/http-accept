@@ -33,35 +33,31 @@ module HTTP
 			
 			# Map a set of mime types to objects.
 			class Map
-				WILDCARD = '*'.freeze
+				WILDCARD = "*/*".freeze
 				
 				def initialize
-					@media_types = Hash.new{|h,k| h[k] = {}}
-					
-					# Primarily for implementing #freeze efficiently.
-					@all = []
+					@media_types = {}
 				end
 				
 				def freeze
-					@media_types.freeze
-					@media_types.each{|key,value| value.freeze}
-					
-					@all.freeze
-					@all.each(&:freeze)
-					
-					super
+					unless frozen?
+						@media_types.freeze
+						@media_types.each{|key,value| value.freeze}
+						
+						super
+					end
 				end
 				
 				# Given a list of content types (e.g. from browser_preferred_content_types), return the best converter.
 				def for(media_types)
 					media_types.each do |media_range|
-						type, subtype = media_range.split
+						mime_type = case media_range
+							when String then media_range
+							else media_range.mime_type
+						end
 						
-						# TODO: Could be improved using dig?
-						if major_type = @media_types.fetch(type, nil)
-							if object = major_type.fetch(subtype, nil)
-								return object, media_range
-							end
+						if object = @media_types[mime_type]
+							return object, media_range
 						end
 					end
 					
@@ -70,28 +66,43 @@ module HTTP
 				
 				# Add a converter to the collection. A converter can be anything that responds to #content_type.
 				def << object
-					type, subtype = object.content_type.split('/')
+					type, subtype = object.content_type.split
 					
-					if @media_types.empty?
-						@media_types[WILDCARD][WILDCARD] = object
-					end
-					
-					if @media_types[type].empty?
-						@media_types[type][WILDCARD] = object
-					end
-					
-					@media_types[type][subtype] = object
-					@all << object
+					@media_types[WILDCARD] = object if @media_types.empty?
+					@media_types["#{type}/*"] ||= object
+					@media_types[object.content_type] = object
 				end
 			end
 			
 			class MediaRange < Struct.new(:mime_type, :parameters)
+				def parameters_string
+					return '' if parameters == nil or parameters.empty?
+					
+					parameters.collect do |key, value|
+						"; #{key.to_s}=#{QuotedString.quote(value.to_s)}"
+					end.join
+				end
+				
+				def === other
+					if other.is_a? self.class
+						super
+					else
+						return self.mime_type === other
+					end
+				end
+				
+				def to_s
+					@to_s || "#{mime_type}#{parameters_string}"
+				end
+				
+				alias to_str to_s
+				
 				def quality_factor
 					parameters.fetch('q', 1.0).to_f
 				end
 				
 				def split
-					@type, @subtype = mime_type.split('/')
+					mime_type.split('/')
 				end
 				
 				def self.parse(scanner, normalize_whitespace = true)
