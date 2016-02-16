@@ -66,11 +66,13 @@ module HTTP
 				
 				# Add a converter to the collection. A converter can be anything that responds to #content_type.
 				def << object
-					type, subtype = object.content_type.split
+					type, subtype = object.content_type.split('/')
 					
 					@media_types[WILDCARD] = object if @media_types.empty?
 					@media_types["#{type}/*"] ||= object
-					@media_types[object.content_type] = object
+					@media_types["#{type}/#{subtype}"] ||= object
+					
+					return self
 				end
 			end
 			
@@ -101,8 +103,8 @@ module HTTP
 					parameters.fetch('q', 1.0).to_f
 				end
 				
-				def split
-					mime_type.split('/')
+				def split(on = '/', count = 2)
+					mime_type.split(on, count)
 				end
 				
 				def self.parse(scanner, normalize_whitespace = true)
