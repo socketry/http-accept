@@ -49,7 +49,7 @@ Normally, you'd want to match the media types against some set of available mime
 
 	module ToJSON
 		def content_type
-			"application/json"
+			HTTP::Accept::ContentType.new("application/json", charset: 'utf-8')
 		end
 		
 		def convert(object, options)
