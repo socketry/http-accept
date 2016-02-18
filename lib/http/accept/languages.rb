@@ -76,7 +76,7 @@ module HTTP
 				end
 			end
 			
-			class LanguageRange < Struct.new(:locale, :q)
+			LanguageRange = Struct.new(:locale, :q) do
 				def quality_factor
 					(q || 1.0).to_f
 				end

@@ -76,7 +76,7 @@ module HTTP
 				end
 			end
 			
-			class MediaRange < Struct.new(:mime_type, :parameters)
+			MediaRange = Struct.new(:mime_type, :parameters) do
 				def parameters_string
 					return '' if parameters == nil or parameters.empty?
 					
