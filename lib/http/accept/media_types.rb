@@ -65,7 +65,7 @@ module HTTP
 					return nil
 				end
 				
-				# Add a converter to the collection. A converter can be anything that responds to #content_type. Objects will be considered in the order they are added, subsequent objects cannot override previously defined media types.
+				# Add a converter to the collection. A converter can be anything that responds to #content_type. Objects will be considered in the order they are added, subsequent objects cannot override previously defined media types. `object` must respond to #split('/', 2) which should give the type and subtype.
 				def << object
 					type, subtype = object.split('/', 2)
 					
