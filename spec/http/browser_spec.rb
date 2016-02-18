@@ -31,6 +31,8 @@ end
 RSpec.describe HTTP::Accept::MediaTypes do
 	include_examples "wildcard media range", {'HTTP_ACCEPT' => '   */*   '}
 	include_examples "wildcard media range", {'HTTP_ACCEPT' => '*/*'}
+	
+	# http://stackoverflow.com/questions/12130910/how-to-interpret-empty-http-accept-header
 	include_examples "wildcard media range", {'HTTP_ACCEPT' => '   '}
 	include_examples "wildcard media range", {'HTTP_ACCEPT' => ''}
 	
