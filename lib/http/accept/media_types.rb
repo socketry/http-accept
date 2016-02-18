@@ -26,6 +26,7 @@ require_relative 'sort'
 
 module HTTP
 	module Accept
+		# Parse and process the HTTP Accept: header.
 		module MediaTypes
 			# According to https://tools.ietf.org/html/rfc7231#section-5.3.2
 			MIME_TYPE = /(#{TOKEN})\/(#{TOKEN})/
@@ -48,7 +49,7 @@ module HTTP
 					end
 				end
 				
-				# Given a list of content types (e.g. from browser_preferred_content_types), return the best converter.
+				# Given a list of content types (e.g. from browser_preferred_content_types), return the best converter. Media types can be an array of MediaRange or String values.
 				def for(media_types)
 					media_types.each do |media_range|
 						mime_type = case media_range
@@ -64,18 +65,26 @@ module HTTP
 					return nil
 				end
 				
-				# Add a converter to the collection. A converter can be anything that responds to #content_type.
+				# Add a converter to the collection. A converter can be anything that responds to #content_type. Objects will be considered in the order they are added, subsequent objects cannot override previously defined media types.
 				def << object
-					type, subtype = object.content_type.split('/')
+					type, subtype = object.split('/', 2)
 					
+					# We set the default if not specified already:
 					@media_types[WILDCARD] = object if @media_types.empty?
-					@media_types["#{type}/*"] ||= object
-					@media_types["#{type}/#{subtype}"] ||= object
+					
+					if type != '*'
+						@media_types["#{type}/*"] ||= object
+						
+						if subtype != '*'
+							@media_types["#{type}/#{subtype}"] ||= object
+						end
+					end
 					
 					return self
 				end
 			end
 			
+			# A single entry in the Accept: header, which includes a mime type and associated parameters.
 			MediaRange = Struct.new(:mime_type, :parameters) do
 				def parameters_string
 					return '' if parameters == nil or parameters.empty?
@@ -151,7 +160,7 @@ module HTTP
 			HTTP_ACCEPT = 'HTTP_ACCEPT'.freeze
 			WILDCARD_MEDIA_RANGE = MediaRange.new("*/*", {}).freeze
 			
-			# Parse the list of browser preferred content types and return ordered by priority. If no `Accept:` header is specified, the behaviour is the same as if `Accept: */*` was provided.
+			# Parse the list of browser preferred content types and return ordered by priority. If no `Accept:` header is specified, the behaviour is the same as if `Accept: */*` was provided (according to RFC).
 			def self.browser_preferred_media_types(env)
 				if accept_content_types = env[HTTP_ACCEPT]
 					accept_content_types.strip!

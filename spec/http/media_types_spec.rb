@@ -72,7 +72,11 @@ module HTTP::Accept::MediaTypesSpec
 	end
 	
 	describe HTTP::Accept::MediaTypes::Map do
-		Converter = Struct.new(:content_type)
+		Converter = Struct.new(:content_type) do
+			def split(*args)
+				self.content_type.split(*args)
+			end
+		end
 		
 		let(:text_html_converter) {Converter.new("text/html")}
 		
