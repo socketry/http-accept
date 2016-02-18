@@ -107,22 +107,28 @@ module HTTP
 					mime_type.split(on, count)
 				end
 				
+				def self.parse_parameters(scanner, normalize_whitespace)
+					parameters = {}
+					
+					while scanner.scan(PARAMETER)
+						key = scanner[:key]
+						
+						# If the regular expression PARAMETER matched, it must be one of these two:
+						if value = scanner[:value]
+							parameters[key] = value
+						elsif quoted_value = scanner[:quoted_value]
+							parameters[key] = QuotedString.unquote(quoted_value, normalize_whitespace)
+						end
+					end
+					
+					return parameters
+				end
+				
 				def self.parse(scanner, normalize_whitespace = true)
 					return to_enum(:parse, scanner, normalize_whitespace) unless block_given?
 					
 					while mime_type = scanner.scan(MIME_TYPE)
-						parameters = {}
-						
-						while scanner.scan(PARAMETER)
-							key = scanner[:key]
-							
-							# If the regular expression PARAMETER matched, it must be one of these two:
-							if value = scanner[:value]
-								parameters[key] = value
-							elsif quoted_value = scanner[:quoted_value]
-								parameters[key] = QuotedString.unquote(quoted_value, normalize_whitespace)
-							end
-						end
+						parameters = parse_parameters(scanner, normalize_whitespace)
 						
 						yield self.new(mime_type, parameters)
 						
@@ -140,6 +146,25 @@ module HTTP
 				media_types = MediaRange.parse(scanner, normalize_whitespace)
 				
 				return Sort.by_quality_factor(media_types)
+			end
+			
+			HTTP_ACCEPT = 'HTTP_ACCEPT'.freeze
+			WILDCARD_MEDIA_RANGE = MediaRange.new("*/*", {}).freeze
+			
+			# Parse the list of browser preferred content types and return ordered by priority. If no `Accept:` header is specified, the behaviour is the same as if `Accept: */*` was provided.
+			def self.browser_preferred_media_types(env)
+				if accept_content_types = env[HTTP_ACCEPT]
+					accept_content_types.strip!
+					
+					unless accept_content_types.empty?
+						return HTTP::Accept::MediaTypes.parse(accept_content_types)
+					end
+				end
+				
+				# According to http://tools.ietf.org/html/rfc7231#section-5.3.2:
+				# A request without any Accept header field implies that the user agent will accept any media type in response.
+				# You should treat a non-existent Accept header as */*.
+				return [WILDCARD_MEDIA_RANGE]
 			end
 		end
 	end
