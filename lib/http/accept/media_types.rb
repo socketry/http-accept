@@ -103,7 +103,7 @@ module HTTP
 				end
 				
 				def to_s
-					@to_s || "#{mime_type}#{parameters_string}"
+					"#{mime_type}#{parameters_string}"
 				end
 				
 				alias to_str to_s

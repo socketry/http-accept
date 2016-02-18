@@ -23,9 +23,13 @@
 require 'http/accept/media_types'
 require 'http/accept/languages'
 
-module HTTP::Accept::MediaTypesSpec
+module HTTP::Accept::FrozenSpec
 	describe HTTP::Accept::MediaTypes::Map do
-		Converter = Struct.new(:content_type)
+		Converter = Struct.new(:content_type) do
+			def split(*args)
+				self.content_type.split(*args)
+			end
+		end
 		
 		let(:text_html_converter) {Converter.new("text/html")}
 		let(:text_plain_converter) {Converter.new("text/plain")}

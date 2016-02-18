@@ -62,7 +62,7 @@ RSpec.shared_examples "web browser" do
 		map << html_content_type
 		map << json_content_type
 		
-		object, media_range = map.for(media_types)
+		object, _ = map.for(media_types)
 		
 		expect(object).to be == html_content_type
 	end
@@ -100,7 +100,7 @@ RSpec.shared_examples "json api" do
 	it "should match application/json" do
 		map << json_content_type
 		
-		object, media_range = map.for(media_types)
+		object, _ = map.for(media_types)
 		
 		expect(object).to be == json_content_type
 	end
