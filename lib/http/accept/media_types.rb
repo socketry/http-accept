@@ -24,6 +24,8 @@ require_relative 'parse_error'
 require_relative 'quoted_string'
 require_relative 'sort'
 
+require_relative 'media_types/map'
+
 module HTTP
 	module Accept
 		# Parse and process the HTTP Accept: header.
@@ -31,58 +33,6 @@ module HTTP
 			# According to https://tools.ietf.org/html/rfc7231#section-5.3.2
 			MIME_TYPE = /(#{TOKEN})\/(#{TOKEN})/
 			PARAMETER = /\s*;\s*(?<key>#{TOKEN})=((?<value>#{TOKEN})|(?<quoted_value>#{QUOTED_STRING}))/
-			
-			# Map a set of mime types to objects.
-			class Map
-				WILDCARD = "*/*".freeze
-				
-				def initialize
-					@media_types = {}
-				end
-				
-				def freeze
-					unless frozen?
-						@media_types.freeze
-						@media_types.each{|key,value| value.freeze}
-						
-						super
-					end
-				end
-				
-				# Given a list of content types (e.g. from browser_preferred_content_types), return the best converter. Media types can be an array of MediaRange or String values.
-				def for(media_types)
-					media_types.each do |media_range|
-						mime_type = case media_range
-							when String then media_range
-							else media_range.mime_type
-						end
-						
-						if object = @media_types[mime_type]
-							return object, media_range
-						end
-					end
-					
-					return nil
-				end
-				
-				# Add a converter to the collection. A converter can be anything that responds to #content_type. Objects will be considered in the order they are added, subsequent objects cannot override previously defined media types. `object` must respond to #split('/', 2) which should give the type and subtype.
-				def << object
-					type, subtype = object.split('/', 2)
-					
-					# We set the default if not specified already:
-					@media_types[WILDCARD] = object if @media_types.empty?
-					
-					if type != '*'
-						@media_types["#{type}/*"] ||= object
-						
-						if subtype != '*'
-							@media_types["#{type}/#{subtype}"] ||= object
-						end
-					end
-					
-					return self
-				end
-			end
 			
 			# A single entry in the Accept: header, which includes a mime type and associated parameters.
 			MediaRange = Struct.new(:mime_type, :parameters) do
