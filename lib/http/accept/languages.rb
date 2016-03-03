@@ -35,7 +35,7 @@ module HTTP
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(;q=(?<q>#{QVALUE}))?/
 			
 			# Provides an efficient data-structure for matching the Accept-Languages header to set of available locales according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
-			class Locales < Array
+			class Locales
 				def self.expand(locale, into)
 					parts = locale.split('-')
 					
@@ -49,21 +49,22 @@ module HTTP
 				end
 				
 				def initialize(names)
-					super(names)
-					
+					@names = names
 					@patterns = {}
 					
-					self.each{|name| self.class.expand(name, @patterns)}
+					@names.each{|name| self.class.expand(name, @patterns)}
 					
 					self.freeze
 				end
 				
 				def freeze
+					@names.freeze
 					@patterns.freeze
 					
 					super
 				end
 				
+				attr :names
 				attr :patterns
 				
 				# Returns the intersection of others retaining order.
