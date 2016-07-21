@@ -26,6 +26,9 @@ require_relative 'accept/version'
 require_relative 'accept/media_types'
 require_relative 'accept/content_type'
 
+# Accept-Encoding: header
+require_relative 'accept/encodings'
+
 # Accept-Language: header
 require_relative 'accept/languages'
 
