@@ -88,14 +88,14 @@ module HTTP::Accept::EncodingsSpec
 				expect(encodings[2].encoding).to be == "sdch"
 			end
 			
-			if "should treat a blank header as 'identity'" do
+			it "should treat a blank header as 'identity'" do
 				env = {HTTP::Accept::Encodings::HTTP_ACCEPT_ENCODING => ""}
 				encodings = HTTP::Accept::Encodings.browser_preferred_content_codings(env)
 				expect(encodings.length).to be == 1
 				expect(encodings[0].encoding).to be == "identity"
 			end
 			
-			if "should treat a missing header as '*'" do
+			it "should treat a missing header as '*'" do
 				env = {}
 				encodings = HTTP::Accept::Encodings.browser_preferred_content_codings(env)
 				expect(encodings.length).to be == 1
