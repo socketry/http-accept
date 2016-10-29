@@ -65,6 +65,12 @@ module HTTP
 					super
 				end
 				
+				def each(&block)
+					return to_enum unless block_given?
+					
+					@names.each(&block)
+				end
+				
 				attr :names
 				attr :patterns
 				
@@ -75,6 +81,18 @@ module HTTP
 				
 				def include? locale_name
 					@patterns.include? locale_name
+				end
+				
+				def join(*args)
+					@names.join(*args)
+				end
+				
+				def + others
+					self.class.new(@names + others.to_a)
+				end
+				
+				def to_a
+					@names
 				end
 			end
 			

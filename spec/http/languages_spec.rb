@@ -106,5 +106,15 @@ module HTTP::Accept::LanguagesSpec
 			expect(locales).to be_include "en-au"
 			expect(locales).to be_include "en"
 		end
+		
+		it "can be joined into a string" do
+			expect(locales.join(',')).to be == "en-us,en-nz,en-au"
+		end
+		
+		it "can be added together" do
+			others = ['ja']
+			
+			expect(locales + others).to include('en', 'en-us', 'ja')
+		end
 	end
 end
