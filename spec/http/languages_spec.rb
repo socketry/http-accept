@@ -60,6 +60,14 @@ module HTTP::Accept::LanguagesSpec
 			expect(languages[2].locale).to be == "jp"
 		end
 		
+		it "should parse with optional whitespace" do
+			languages = HTTP::Accept::Languages.parse("de, en-US; q=0.7, en ; q=0.3")
+			
+			expect(languages[0].locale).to be == "de"
+			expect(languages[1].locale).to be == "en-US"
+			expect(languages[2].locale).to be == "en"
+		end
+		
 		it "should not accept invalid input" do
 			[
 				"en;f=1", "de;jp",

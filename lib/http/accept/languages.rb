@@ -32,7 +32,8 @@ module HTTP
 			# https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9
 			QVALUE = /0(\.[0-9]{0,3})?|1(\.[0]{0,3})?/
 			
-			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(;q=(?<q>#{QVALUE}))?/
+			# https://greenbytes.de/tech/webdav/rfc7231.html#quality.values
+			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(\s*;\s*q=(?<q>#{QVALUE}))?/
 			
 			# Provides an efficient data-structure for matching the Accept-Languages header to set of available locales according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
 			class Locales
