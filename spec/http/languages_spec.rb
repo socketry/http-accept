@@ -116,5 +116,13 @@ module HTTP::Accept::LanguagesSpec
 			
 			expect(locales + others).to include('en', 'en-us', 'ja')
 		end
+		
+		it "can be converted to an array of names" do
+			expect(locales.to_a).to be == locales.names
+		end
+		
+		it "can be enumerated using each" do
+			expect(locales.each.to_a).to be == locales.names
+		end
 	end
 end
