@@ -46,6 +46,40 @@ RSpec.describe HTTP::Accept::MediaTypes do
 	end
 end
 
+RSpec.shared_examples "media type" do |header_value, priorities = nil|
+	let(:media_types) {HTTP::Accept::MediaTypes.parse(header_value)}
+	
+	it "should parse without error" do
+		expect{media_types}.to_not raise_error
+	end
+	
+	it "should have at least one entry" do
+		expect(media_types.size).to be > 0
+	end
+	
+	it "should have the correct priorities" do
+		puts media_types.inspect
+		puts priorities.inspect
+		
+		expect(media_types).to be == priorities
+	end if priorities
+end
+
+# Copied from https://greenbytes.de/tech/webdav/rfc7231.html#rfc.section.5.3.2
+RSpec.describe "RFC Example Accept: headers" do
+	it_behaves_like "media type", "audio/*; q=0.2, audio/basic"
+	it_behaves_like "media type", "text/plain; q=0.5, text/html,\n text/x-dvi; q=0.8, text/x-c"
+	it_behaves_like "media type", "text/*, text/plain, text/plain;format=flowed, */*"
+	
+	it_behaves_like "media type", "text/*;q=0.3, text/html;q=0.7, text/html;level=1,\n text/html;level=2;q=0.4, */*;q=0.5", [
+		HTTP::Accept::MediaTypes::MediaRange.new("text/html", "level" => "1"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text/html", "q" => "0.7"),
+		HTTP::Accept::MediaTypes::MediaRange.new("*/*", "q" => "0.5"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text/html", "level" => "2", "q" => "0.4"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text/*", "q" => "0.3"),
+	]
+end
+
 RSpec.shared_context "server content types" do
 	let(:json_content_type) {HTTP::Accept::ContentType.new('application/json')}
 	let(:html_content_type) {HTTP::Accept::ContentType.new('text/html')}
