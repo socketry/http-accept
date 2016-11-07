@@ -20,7 +20,9 @@ I am concerned about correctness, security and performance. As such, I implement
 
 Add this line to your application's Gemfile:
 
-	gem 'http-accept'
+```ruby
+gem 'http-accept'
+```
 
 And then execute:
 
@@ -38,59 +40,67 @@ Here are some examples of how to parse various headers.
 
 You can parse the incoming `Accept:` header:
 
-	media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json; version=1")
+```ruby
+media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json; version=1")
 
-	expect(media_types[0].mime_type).to be == "application/json"
-	expect(media_types[0].parameters).to be == {'version' => '1'}
-	expect(media_types[1].mime_type).to be == "text/html"
-	expect(media_types[1].parameters).to be == {'q' => '0.5'}
+expect(media_types[0].mime_type).to be == "application/json"
+expect(media_types[0].parameters).to be == {'version' => '1'}
+expect(media_types[1].mime_type).to be == "text/html"
+expect(media_types[1].parameters).to be == {'q' => '0.5'}
+```
 
 Normally, you'd want to match the media types against some set of available mime types:
 
-	module ToJSON
-		def content_type
-			HTTP::Accept::ContentType.new("application/json", charset: 'utf-8')
-		end
-		
-		# Used for inserting into map.
-		def split(*args)
-			content_type.split(*args)
-		end
-		
-		def convert(object, options)
-			object.to_json
-		end
-	end
-	
-	module ToXML
-		# Are you kidding?
-	end
-	
-	map = HTTP::Accept::MediaTypes::Map.new
-	map << ToJSON
-	map << ToXML
-	
-	object, media_range = map.for(media_types)
-	content = object.convert(model, media_range.parameters)
-	response = [200, {'Content-Type' => object.content_type}, [content]]
+```ruby
+module ToJSON
+  def content_type
+    HTTP::Accept::ContentType.new("application/json", charset: 'utf-8')
+  end
+
+  # Used for inserting into map.
+  def split(*args)
+    content_type.split(*args)
+  end
+
+  def convert(object, options)
+    object.to_json
+  end
+end
+
+module ToXML
+  # Are you kidding?
+end
+
+map = HTTP::Accept::MediaTypes::Map.new
+map << ToJSON
+map << ToXML
+
+object, media_range = map.for(media_types)
+content = object.convert(model, media_range.parameters)
+response = [200, {'Content-Type' => object.content_type}, [content]]
+```
 
 ### Parsing Accept-Language: headers
 
 You can parse the incoming `Accept-Language:` header:
 
-	languages = HTTP::Accept::Language.parse("da, en-gb;q=0.8, en;q=0.7")
+```ruby
+languages = HTTP::Accept::Languages.parse("da, en-gb;q=0.8, en;q=0.7")
 
-	expect(languages[0].locale).to be == "da"
-	expect(languages[1].locale).to be == "en-gb"
-	expect(languages[2].locale).to be == "en"
+expect(languages[0].locale).to be == "da"
+expect(languages[1].locale).to be == "en-gb"
+expect(languages[2].locale).to be == "en"
+```
 
 Normally, you'd want to match the languages against some set of available localizations:
 
-	available_localizations = HTTP::Accept::Languages::Locales.new(["en-nz", "en-us"])
-	
-	# Given the languages that the user wants, and the localizations available, compute the set of desired localizations.
-	desired_localizations = available_localizations & languages
-	
+```ruby
+available_localizations = HTTP::Accept::Languages::Locales.new(["en-nz", "en-us"])
+
+# Given the languages that the user wants, and the localizations available, compute the set of desired localizations.
+desired_localizations = available_localizations & languages
+```
+
 The `desired_localizations` in the example above is a subset of `available_localizations`.
 
 `HTTP::Accept::Languages::Locales` provides an efficient data-structure for matching the Accept-Languages header to set of available localizations according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
