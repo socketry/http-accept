@@ -1,8 +1,6 @@
 # HTTP::Accept
 
-Provides a robust set of parsers for dealing with Accept and Accept-Language HTTP headers.
-
-Current `Accept-Encoding:` and `Accept-Charset:` are not supported. This is because they are not particularly useful headers, but PRs are welcome.
+Provides a robust set of parsers for dealing with HTTP `Accept`, `Accept-Language`, `Accept-Encoding`, `Accept-Charset` headers.
 
 [![Build Status](https://secure.travis-ci.org/ioquatix/http-accept.svg)](http://travis-ci.org/ioquatix/http-accept)
 [![Code Climate](https://codeclimate.com/github/ioquatix/http-accept.svg)](https://codeclimate.com/github/ioquatix/http-accept)
