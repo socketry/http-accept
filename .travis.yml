@@ -1,5 +1,21 @@
 language: ruby
-sudo: false
-env: COVERAGE=true
-rvm:
-  - 2.3.0
+sudo: required
+dist: xenial
+cache: bundler
+
+matrix:
+  include:
+    - rvm: 2.3
+    - rvm: 2.4
+    - rvm: 2.5
+    - rvm: 2.6
+    - rvm: truffleruby
+    - rvm: jruby-head
+      env: JRUBY_OPTS="--debug -X+O"
+    - rvm: ruby-head
+    - rvm: rbx-3
+  allow_failures:
+    - rvm: truffleruby
+    - rvm: ruby-head
+    - rvm: jruby-head
+    - rvm: rbx-3
