@@ -2,9 +2,9 @@
 
 Provides a robust set of parsers for dealing with HTTP `Accept`, `Accept-Language`, `Accept-Encoding`, `Accept-Charset` headers.
 
-[![Build Status](https://secure.travis-ci.org/ioquatix/http-accept.svg)](http://travis-ci.org/ioquatix/http-accept)
-[![Code Climate](https://codeclimate.com/github/ioquatix/http-accept.svg)](https://codeclimate.com/github/ioquatix/http-accept)
-[![Coverage Status](https://coveralls.io/repos/ioquatix/http-accept/badge.svg)](https://coveralls.io/r/ioquatix/http-accept)
+[![Build Status](https://secure.travis-ci.org/socketry/http-accept.svg)](http://travis-ci.org/socketry/http-accept)
+[![Code Climate](https://codeclimate.com/github/socketry/http-accept.svg)](https://codeclimate.com/github/socketry/http-accept)
+[![Coverage Status](https://coveralls.io/repos/socketry/http-accept/badge.svg)](https://coveralls.io/r/socketry/http-accept)
 
 ## Motivation
 
