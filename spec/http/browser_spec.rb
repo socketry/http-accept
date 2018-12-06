@@ -37,7 +37,7 @@ RSpec.describe HTTP::Accept::MediaTypes do
 	include_examples "wildcard media range", {'HTTP_ACCEPT' => '   '}
 	include_examples "wildcard media range", {'HTTP_ACCEPT' => ''}
 	
-	let(:text_plain_media_range) {HTTP::Accept::MediaTypes::MediaRange.new("text/plain", {})}
+	let(:text_plain_media_range) {HTTP::Accept::MediaTypes::MediaRange.new("text", "plain", {})}
 	
 	it "should parse accept header" do
 		media_types = HTTP::Accept::MediaTypes.browser_preferred_media_types('HTTP_ACCEPT' => text_plain_media_range.to_s)
@@ -72,18 +72,18 @@ RSpec.describe "RFC Example Accept: headers" do
 	it_behaves_like "media type", "text/*, text/plain, text/plain;format=flowed, */*"
 	
 	it_behaves_like "media type", "text/*;q=0.3, text/html;q=0.7, text/html;level=1,\n text/html;level=2;q=0.4, */*;q=0.5", [
-		HTTP::Accept::MediaTypes::MediaRange.new("text/html", "level" => "1"),
-		HTTP::Accept::MediaTypes::MediaRange.new("text/html", "q" => "0.7"),
-		HTTP::Accept::MediaTypes::MediaRange.new("*/*", "q" => "0.5"),
-		HTTP::Accept::MediaTypes::MediaRange.new("text/html", "level" => "2", "q" => "0.4"),
-		HTTP::Accept::MediaTypes::MediaRange.new("text/*", "q" => "0.3"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text", "html", "level" => "1"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text", "html", "q" => "0.7"),
+		HTTP::Accept::MediaTypes::MediaRange.new("*", "*", "q" => "0.5"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text", "html", "level" => "2", "q" => "0.4"),
+		HTTP::Accept::MediaTypes::MediaRange.new("text", "*", "q" => "0.3"),
 	]
 end
 
 RSpec.shared_context "server content types" do
-	let(:json_content_type) {HTTP::Accept::ContentType.new('application/json')}
-	let(:html_content_type) {HTTP::Accept::ContentType.new('text/html')}
-	let(:wildcard_media_range) {HTTP::Accept::MediaTypes::MediaRange.new('*/*')}
+	let(:json_content_type) {HTTP::Accept::ContentType.new("application", "json")}
+	let(:html_content_type) {HTTP::Accept::ContentType.new("text", "html")}
+	let(:wildcard_media_range) {HTTP::Accept::MediaTypes::MediaRange.new("*", "*")}
 	
 	let(:map) {HTTP::Accept::MediaTypes::Map.new}
 	let(:media_types) {HTTP::Accept::MediaTypes.parse(accept_header)}

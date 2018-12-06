@@ -25,9 +25,9 @@ module HTTP
 	module Accept
 		# A content type is different from a media range, in that a content type should not have any wild cards.
 		class ContentType < MediaTypes::MediaRange
-			def initialize(mime_type, parameters = {})
+			def initialize(type, subtype, parameters = {})
 				# We do some basic validation here:
-				raise ArgumentError.new("#{self.class} can not have wildcards: #{mime_type}") if mime_type.include? '*'
+				raise ArgumentError.new("#{self.class} can not have wildcards: #{type}", "#{subtype}") if type.include?('*') || subtype.include?('*')
 				
 				super
 			end

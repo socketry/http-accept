@@ -24,7 +24,7 @@ require 'http/accept/media_types'
 require 'http/accept/languages'
 
 module HTTP::Accept::FrozenSpec
-	describe HTTP::Accept::MediaTypes::Map do
+	RSpec.describe HTTP::Accept::MediaTypes::Map do
 		Converter = Struct.new(:content_type) do
 			def split(*args)
 				self.content_type.split(*args)
@@ -45,7 +45,7 @@ module HTTP::Accept::FrozenSpec
 		end
 	end
 	
-	describe HTTP::Accept::Languages::Locales do
+	RSpec.describe HTTP::Accept::Languages::Locales do
 		# Specified by the server, content localizations that are actually available:
 		let(:locales) {HTTP::Accept::Languages::Locales.new(["en-us", "en-nz", "en-au"])}
 		

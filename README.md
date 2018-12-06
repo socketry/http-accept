@@ -52,7 +52,7 @@ Normally, you'd want to match the media types against some set of available mime
 ```ruby
 module ToJSON
   def content_type
-    HTTP::Accept::ContentType.new("application/json", charset: 'utf-8')
+    HTTP::Accept::ContentType.new("application", "json", charset: 'utf-8')
   end
 
   # Used for inserting into map.

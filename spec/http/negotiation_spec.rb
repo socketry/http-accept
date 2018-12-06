@@ -22,9 +22,9 @@ require 'http/accept/media_types'
 require 'http/accept/content_type'
 
 RSpec.describe HTTP::Accept::MediaTypes do
-	let(:json_content_type) {HTTP::Accept::ContentType.new('application/json')}
-	let(:html_content_type) {HTTP::Accept::ContentType.new('text/html')}
-	let(:wildcard_media_range) {HTTP::Accept::MediaTypes::MediaRange.new('*/*')}
+	let(:json_content_type) {HTTP::Accept::ContentType.new("application", "json")}
+	let(:html_content_type) {HTTP::Accept::ContentType.new("text", "html")}
+	let(:wildcard_media_range) {HTTP::Accept::MediaTypes::MediaRange.new("*", "*")}
 	
 	let(:map) {HTTP::Accept::MediaTypes::Map.new}
 	

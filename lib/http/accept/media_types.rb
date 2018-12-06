@@ -31,11 +31,11 @@ module HTTP
 		# Parse and process the HTTP Accept: header.
 		module MediaTypes
 			# According to https://tools.ietf.org/html/rfc7231#section-5.3.2
-			MIME_TYPE = /(#{TOKEN})\/(#{TOKEN})/
+			MIME_TYPE = /(?<type>#{TOKEN})\/(?<subtype>#{TOKEN})/
 			PARAMETER = /\s*;\s*(?<key>#{TOKEN})=((?<value>#{TOKEN})|(?<quoted_value>#{QUOTED_STRING}))/
 			
 			# A single entry in the Accept: header, which includes a mime type and associated parameters.
-			MediaRange = Struct.new(:mime_type, :parameters) do
+			MediaRange = Struct.new(:type, :subtype, :parameters) do
 				def parameters_string
 					return '' if parameters == nil or parameters.empty?
 					
@@ -52,8 +52,12 @@ module HTTP
 					end
 				end
 				
+				def mime_type
+					"#{type}/#{subtype}"
+				end
+				
 				def to_s
-					"#{mime_type}#{parameters_string}"
+					"#{type}/#{subtype}#{parameters_string}"
 				end
 				
 				alias to_str to_s
@@ -62,8 +66,8 @@ module HTTP
 					parameters.fetch('q', 1.0).to_f
 				end
 				
-				def split(on = '/', count = 2)
-					mime_type.split(on, count)
+				def split(*args)
+					return [type, subtype]
 				end
 				
 				def self.parse_parameters(scanner, normalize_whitespace)
@@ -86,10 +90,13 @@ module HTTP
 				def self.parse(scanner, normalize_whitespace = true)
 					return to_enum(:parse, scanner, normalize_whitespace) unless block_given?
 					
-					while mime_type = scanner.scan(MIME_TYPE)
+					while scanner.scan(MIME_TYPE)
+						type = scanner[:type]
+						subtype = scanner[:subtype]
+						
 						parameters = parse_parameters(scanner, normalize_whitespace)
 						
-						yield self.new(mime_type, parameters)
+						yield self.new(type, subtype, parameters)
 						
 						# Are there more?
 						break unless scanner.scan(/\s*,\s*/)
@@ -108,7 +115,7 @@ module HTTP
 			end
 			
 			HTTP_ACCEPT = 'HTTP_ACCEPT'.freeze
-			WILDCARD_MEDIA_RANGE = MediaRange.new("*/*", {}).freeze
+			WILDCARD_MEDIA_RANGE = MediaRange.new("*", "*", {}).freeze
 			
 			# Parse the list of browser preferred content types and return ordered by priority. If no `Accept:` header is specified, the behaviour is the same as if `Accept: */*` was provided (according to RFC).
 			def self.browser_preferred_media_types(env)

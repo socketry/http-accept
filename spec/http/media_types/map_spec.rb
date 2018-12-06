@@ -34,7 +34,7 @@ module HTTP::Accept::MediaTypes::MapSpec
 		
 		let(:text_html_converter) {Converter.new("text/html")}
 		
-		let(:text_plain_content_type) {HTTP::Accept::ContentType.new("text/plain", charset: 'utf-8')}
+		let(:text_plain_content_type) {HTTP::Accept::ContentType.new("text", "plain", charset: 'utf-8')}
 		let(:text_plain_converter) {Converter.new(text_plain_content_type)}
 		
 		it "should give the correct converter when specified completely" do
