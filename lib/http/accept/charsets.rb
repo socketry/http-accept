@@ -67,9 +67,7 @@ module HTTP
 			
 			# Parse the list of browser preferred charsets and return ordered by priority.
 			def self.browser_preferred_charsets(env)
-				if accept_charsets = env[HTTP_ACCEPT_CHARSET]
-					accept_charsets.strip!
-					
+				if accept_charsets = env[HTTP_ACCEPT_CHARSET]&.strip
 					if accept_charsets.empty?
 						# https://tools.ietf.org/html/rfc7231#section-5.3.3 :
 						#

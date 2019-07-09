@@ -121,9 +121,7 @@ module HTTP
 			
 			# Parse the list of browser preferred content types and return ordered by priority. If no `Accept:` header is specified, the behaviour is the same as if `Accept: */*` was provided (according to RFC).
 			def self.browser_preferred_media_types(env)
-				if accept_content_types = env[HTTP_ACCEPT]
-					accept_content_types.strip!
-					
+				if accept_content_types = env[HTTP_ACCEPT]&.strip
 					unless accept_content_types.empty?
 						return HTTP::Accept::MediaTypes.parse(accept_content_types)
 					end

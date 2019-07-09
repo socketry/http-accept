@@ -74,9 +74,7 @@ module HTTP
 			# specified, the behaviour is the same as if `Accept-Encoding: identity` was provided
 			# (according to RFC).
 			def self.browser_preferred_content_codings(env)
-				if accept_content_codings = env[HTTP_ACCEPT_ENCODING]
-					accept_content_codings.strip!
-					
+				if accept_content_codings = env[HTTP_ACCEPT_ENCODING]&.strip
 					if accept_content_codings.empty?
 						# "An Accept-Encoding header field with a combined field-value that is
 						# empty implies that the user agent does not want any content-coding in
