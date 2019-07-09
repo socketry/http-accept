@@ -1,5 +1,5 @@
-#!/usr/bin/env rspec
-
+# frozen_string_literal: true
+#
 # Copyright (C) 2016, Matthew Kerwin <matthew@kerwin.net.au>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy

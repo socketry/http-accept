@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+#
 # Copyright, 2016, by Samuel G. D. Williams. <http://www.codeotaku.com>
 # 
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,6 +22,6 @@
 
 module HTTP
 	module Accept
-		VERSION = "2.0.0"
+		VERSION = "2.1.0"
 	end
 end
