@@ -9,6 +9,7 @@ Gem::Specification.new do |spec|
 
 	spec.summary       = %q{Parse Accept and Accept-Language HTTP headers.}
 	spec.homepage      = "https://github.com/ioquatix/http-accept"
+	spec.license       = 'MIT'
 
 	spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
 	spec.bindir        = "exe"
