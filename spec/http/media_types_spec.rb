@@ -51,7 +51,6 @@ RSpec.describe HTTP::Accept::MediaTypes do
 		expect(media_types[0].parameters).to be == {'key' => "A,B,C"}
 	end
 	
-	
 	it "should not accept invalid input" do
 		[
 			"foo",
