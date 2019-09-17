@@ -38,6 +38,10 @@ module HTTP
 			
 			# A single entry in the Accept: header, which includes a mime type and associated parameters.
 			MediaRange = Struct.new(:type, :subtype, :parameters) do
+				def initialize(type, subtype = '*', parameters = {})
+					super(type, subtype, parameters)
+				end
+				
 				def parameters_string
 					return '' if parameters == nil or parameters.empty?
 					
