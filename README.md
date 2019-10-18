@@ -112,7 +112,7 @@ The `desired_localizations` in the example above is a subset of `available_local
 
 ## License
 
-Released under the [MIT license](https://github.com/socketry/LICENSE).
+Released under the [MIT license](https://github.com/socketry/http-accept/blob/master/LICENSE).
 
 Copyright, 2016, by [Samuel G. D. Williams](http://www.codeotaku.com/samuel-williams).  
 Copyright, 2016, by [Matthew Kerwin](http://kerwin.net.au).
