@@ -33,7 +33,7 @@ module HTTP
 			
 			# https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9
 			QVALUE = /0(\.[0-9]{0,})?|1(\.[0]{0,})?/
-      
+			
 			# https://greenbytes.de/tech/webdav/rfc7231.html#quality.values
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(\s*;\s*q=(?<q>#{QVALUE}))?/
 			
