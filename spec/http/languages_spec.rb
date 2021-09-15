@@ -77,7 +77,7 @@ RSpec.describe HTTP::Accept::Languages do
   it "should not accept quality factors with more than 6 decimal places" do
 		text = "en;q=0.1234567"
 
-    expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+		expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
 	end
 	
 	it "should not accept invalid input" do
