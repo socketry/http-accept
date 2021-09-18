@@ -67,14 +67,14 @@ RSpec.describe HTTP::Accept::Languages do
 		expect(languages[2].locale).to be == "en"
 	end
 
-  it "should accept quality factors up to 6 decimal places" do
+	it "should accept quality factors up to 6 decimal places" do
 		languages = HTTP::Accept::Languages.parse("en;q=0.123456")
 
 		expect(languages[0].locale).to be == "en"
 		expect(languages[0].quality_factor).to be == 0.123456
 	end
 
-  it "should not accept quality factors with more than 6 decimal places" do
+	it "should not accept quality factors with more than 6 decimal places" do
 		text = "en;q=0.1234567"
 
 		expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
