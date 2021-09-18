@@ -32,7 +32,7 @@ module HTTP
 			LOCALE = /\*|[A-Z]{1,8}(-[A-Z0-9]{1,8})*/i
 			
 			# https://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.9
-			QVALUE = /0(\.[0-9]{0,3})?|1(\.[0]{0,3})?/
+			QVALUE = /0(\.[0-9]{0,6})?|1(\.[0]{0,6})?/
 			
 			# https://greenbytes.de/tech/webdav/rfc7231.html#quality.values
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(\s*;\s*q=(?<q>#{QVALUE}))?/
