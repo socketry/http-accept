@@ -2,8 +2,7 @@
 
 Provides a robust set of parsers for dealing with HTTP `Accept`, `Accept-Language`, `Accept-Encoding`, `Accept-Charset` headers.
 
-[![Build Status](https://secure.travis-ci.org/socketry/http-accept.svg)](http://travis-ci.org/socketry/http-accept)
-[![Coverage Status](https://coveralls.io/repos/socketry/http-accept/badge.svg)](https://coveralls.io/r/socketry/http-accept)
+[![Development Status](https://github.com/socketry/http-accept/workflows/Development/badge.svg)](https://github.com/socketry/http-accept/actions?workflow=Development)
 
 ## Motivation
 
@@ -17,17 +16,17 @@ I am concerned about correctness, security and performance. As such, I implement
 
 Add this line to your application's Gemfile:
 
-```ruby
+``` ruby
 gem 'http-accept'
 ```
 
 And then execute:
 
-	$ bundle
+    $ bundle
 
 Or install it yourself as:
 
-	$ gem install http-accept
+    $ gem install http-accept
 
 ## Usage
 
@@ -37,7 +36,7 @@ Here are some examples of how to parse various headers.
 
 You can parse the incoming `Accept:` header:
 
-```ruby
+``` ruby
 media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json; version=1")
 
 expect(media_types[0].mime_type).to be == "application/json"
@@ -48,7 +47,7 @@ expect(media_types[1].parameters).to be == {'q' => '0.5'}
 
 Normally, you'd want to match the media types against some set of available mime types:
 
-```ruby
+``` ruby
 module ToJSON
   def content_type
     HTTP::Accept::ContentType.new("application", "json", charset: 'utf-8')
@@ -81,7 +80,7 @@ response = [200, {'Content-Type' => object.content_type}, [content]]
 
 You can parse the incoming `Accept-Language:` header:
 
-```ruby
+``` ruby
 languages = HTTP::Accept::Languages.parse("da, en-gb;q=0.8, en;q=0.7")
 
 expect(languages[0].locale).to be == "da"
@@ -91,7 +90,7 @@ expect(languages[2].locale).to be == "en"
 
 Normally, you'd want to match the languages against some set of available localizations:
 
-```ruby
+``` ruby
 available_localizations = HTTP::Accept::Languages::Locales.new(["en-nz", "en-us"])
 
 # Given the languages that the user wants, and the localizations available, compute the set of desired localizations.
@@ -100,15 +99,15 @@ desired_localizations = available_localizations & languages
 
 The `desired_localizations` in the example above is a subset of `available_localizations`.
 
-`HTTP::Accept::Languages::Locales` provides an efficient data-structure for matching the Accept-Languages header to set of available localizations according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
+`HTTP::Accept::Languages::Locales` provides an efficient data-structure for matching the Accept-Languages header to set of available localizations according to <https://tools.ietf.org/html/rfc7231#section-5.3.5> and <https://tools.ietf.org/html/rfc4647#section-2.3>
 
 ## Contributing
 
-1. Fork it
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+1.  Fork it
+2.  Create your feature branch (`git checkout -b my-new-feature`)
+3.  Commit your changes (`git commit -am 'Add some feature'`)
+4.  Push to the branch (`git push origin my-new-feature`)
+5.  Create new Pull Request
 
 ## License
 
