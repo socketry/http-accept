@@ -28,6 +28,11 @@ Or install it yourself as:
 
     $ gem install http-accept
 
+You should require it in your code like so:
+```ruby
+require 'http/accept'
+```
+
 ## Usage
 
 Here are some examples of how to parse various headers.
