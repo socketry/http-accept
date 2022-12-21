@@ -28,7 +28,7 @@ Or install it yourself as:
 
     $ gem install http-accept
 
-You should require it in your code like so:
+You can then require it in your code like so:
 ```ruby
 require 'http/accept'
 ```
