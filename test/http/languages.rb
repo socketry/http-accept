@@ -1,28 +1,12 @@
 # frozen_string_literal: true
-#
-# Copyright, 2016, by Samuel G. D. Williams. <http://www.codeotaku.com>
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+
+# Released under the MIT License.
+# Copyright, 2016-2024, by Samuel Williams.
+# Copyright, 2021, by Khaled Hassan Hussein.
 
 require 'http/accept/languages'
 
-RSpec.describe HTTP::Accept::Languages do
+describe HTTP::Accept::Languages do
 	it "should parse basic header" do
 		languages = HTTP::Accept::Languages.parse("da, en-gb;q=0.5, en;q=0.25")
 		
@@ -77,7 +61,7 @@ RSpec.describe HTTP::Accept::Languages do
 	it "should not accept quality factors with more than 6 decimal places" do
 		text = "en;q=0.1234567"
 
-		expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+		expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 	end
 	
 	it "should not accept invalid input" do
@@ -85,12 +69,12 @@ RSpec.describe HTTP::Accept::Languages do
 			"en;f=1", "de;jp",
 			";", ","
 		].each do |text|
-			expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
 end
 
-RSpec.describe HTTP::Accept::Languages::Locales do
+describe HTTP::Accept::Languages::Locales do
 	# Specified by the server, content localizations that are actually available:
 	let(:locales) {HTTP::Accept::Languages::Locales.new(["en-us", "en-nz", "en-au"])}
 	
@@ -113,10 +97,10 @@ RSpec.describe HTTP::Accept::Languages::Locales do
 	end
 	
 	it "should include all generic locales" do
-		expect(locales).to be_include "en-us"
-		expect(locales).to be_include "en-nz"
-		expect(locales).to be_include "en-au"
-		expect(locales).to be_include "en"
+		expect(locales).to be(:include?, "en-us")
+		expect(locales).to be(:include?, "en-nz")
+		expect(locales).to be(:include?, "en-au")
+		expect(locales).to be(:include?, "en")
 	end
 	
 	it "can be joined into a string" do
@@ -125,8 +109,13 @@ RSpec.describe HTTP::Accept::Languages::Locales do
 	
 	it "can be added together" do
 		others = ['ja']
+		all_locales = locales + others
 		
-		expect(locales + others).to include('en', 'en-us', 'ja')
+		expect(all_locales).to be(:include?, "en-us")
+		expect(all_locales).to be(:include?, "en-nz")
+		expect(all_locales).to be(:include?, "en-au")
+		expect(all_locales).to be(:include?, "en")
+		expect(all_locales).to be(:include?, "ja")
 	end
 	
 	it "can be converted to an array of names" do

@@ -1,35 +1,19 @@
 # frozen_string_literal: true
-#
-# Copyright (C) 2016, Matthew Kerwin <matthew@kerwin.net.au>
-# 
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-# 
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+
+# Released under the MIT License.
+# Copyright, 2016, by Matthew Kerwin.
+# Copyright, 2017-2024, by Samuel Williams.
 
 require 'http/accept/charsets'
 
-RSpec.describe HTTP::Accept::Charsets::Charset do
+describe HTTP::Accept::Charsets::Charset do
 	it "should have default quality_factor of 1.0" do
 		charset = HTTP::Accept::Charsets::Charset.new('utf-8', nil)
 		expect(charset.quality_factor).to be == 1.0
 	end
 end
 
-RSpec.describe HTTP::Accept::Charsets do
+describe HTTP::Accept::Charsets do
 	it "should parse basic header" do
 		charsets = HTTP::Accept::Charsets.parse("utf-8, iso-8859-1;q=0.5, windows-1252;q=0.25")
 		
@@ -73,7 +57,7 @@ RSpec.describe HTTP::Accept::Charsets do
 			"utf-8;f=1", "us-ascii;utf-8",
 			";", ","
 		].each do |text|
-			expect{HTTP::Accept::Charsets.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Charsets.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
 	
@@ -89,7 +73,7 @@ RSpec.describe HTTP::Accept::Charsets do
 		
 		it "should treat a blank header as an error" do
 			env = {HTTP::Accept::Charsets::HTTP_ACCEPT_CHARSET => ""}
-			expect{HTTP::Accept::Charsets.browser_preferred_charsets(env)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Charsets.browser_preferred_charsets(env)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 		
 		it "should treat a missing header as '*'" do
