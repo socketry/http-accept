@@ -15,6 +15,9 @@ group :maintenance, optional: true do
 end
 
 group :test do
+	gem "bake-test"
+	gem "bake-test-external"
+	
 	gem "sus"
 	gem "covered"
 end
