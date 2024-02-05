@@ -5,13 +5,13 @@
 
 require 'http/accept/content_type'
 
-RSpec.describe HTTP::Accept::ContentType do
+describe HTTP::Accept::ContentType do
 	it "should raise argument error if constructed with wildcard" do
-		expect{HTTP::Accept::ContentType.new("*", "*")}.to raise_error(ArgumentError)
+		expect{HTTP::Accept::ContentType.new("*", "*")}.to raise_exception(ArgumentError)
 	end
 end
 
-RSpec.describe HTTP::Accept::ContentType.new("text", "plain") do
+describe HTTP::Accept::ContentType.new("text", "plain") do
 	it "should format simple mime type" do
 		expect(subject.to_s).to be == "text/plain"
 	end
@@ -25,19 +25,19 @@ RSpec.describe HTTP::Accept::ContentType.new("text", "plain") do
 	end
 end
 
-RSpec.describe HTTP::Accept::ContentType.new("text", "plain", charset: 'utf-8') do
+describe HTTP::Accept::ContentType.new("text", "plain", charset: 'utf-8') do
 	it "should format simple mime type with options" do
 		expect(subject.to_s).to be == "text/plain; charset=utf-8"
 	end
 end
 
-RSpec.describe HTTP::Accept::ContentType.new("text", "plain", charset: 'utf-8', q: 0.8) do
+describe HTTP::Accept::ContentType.new("text", "plain", charset: 'utf-8', q: 0.8) do
 	it "should format simple mime type with multiple options" do
 		expect(subject.to_s).to be == "text/plain; charset=utf-8; q=0.8"
 	end
 end
 
-RSpec.describe HTTP::Accept::ContentType.new("text", "plain", value: '["bar", "baz"]') do
+describe HTTP::Accept::ContentType.new("text", "plain", value: '["bar", "baz"]') do
 	it "should format simple mime type with quoted options" do
 		expect(subject.to_s).to be == "text/plain; value=\"[\\\"bar\\\", \\\"baz\\\"]\""
 	end

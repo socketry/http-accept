@@ -12,6 +12,7 @@ group :maintenance, optional: true do
 	gem "bake-gem"
 end
 
-# Moved Development Dependencies
-gem "covered"
-gem "rspec", "~> 3.0"
+group :test do
+	gem "sus"
+	gem "covered"
+end

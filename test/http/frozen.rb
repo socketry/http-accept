@@ -6,7 +6,7 @@
 require 'http/accept/media_types'
 require 'http/accept/languages'
 
-RSpec.describe HTTP::Accept::MediaTypes::Map do
+describe HTTP::Accept::MediaTypes::Map do
 	let(:converter) do
 		Struct.new(:content_type) do
 			def split(*args)
@@ -18,18 +18,20 @@ RSpec.describe HTTP::Accept::MediaTypes::Map do
 	let(:text_html_converter) {converter.new("text/html")}
 	let(:text_plain_converter) {converter.new("text/plain")}
 	
+	let(:map) {subject.new}
+	
 	it "should be possible to query frozen state" do
-		subject << text_html_converter
-		subject << text_plain_converter
+		map << text_html_converter
+		map << text_plain_converter
 		
-		subject.freeze
+		map.freeze
 		
 		media_types = HTTP::Accept::MediaTypes.parse("bob/dole, text/plain, text/*, */*")
-		expect(subject.for(media_types).first).to be == text_plain_converter
+		expect(map.for(media_types).first).to be == text_plain_converter
 	end
 end
 
-RSpec.describe HTTP::Accept::Languages::Locales do
+describe HTTP::Accept::Languages::Locales do
 	# Specified by the server, content localizations that are actually available:
 	let(:locales) {HTTP::Accept::Languages::Locales.new(["en-us", "en-nz", "en-au"])}
 	

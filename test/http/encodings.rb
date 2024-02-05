@@ -6,14 +6,14 @@
 
 require 'http/accept/encodings'
 
-RSpec.describe HTTP::Accept::Encodings::ContentCoding do
+describe HTTP::Accept::Encodings::ContentCoding do
 	it "should have default quality_factor of 1.0" do
 		encoding = HTTP::Accept::Encodings::ContentCoding.new('gzip', nil)
 		expect(encoding.quality_factor).to be == 1.0
 	end
 end
 
-RSpec.describe HTTP::Accept::Encodings do
+describe HTTP::Accept::Encodings do
 	it "should parse basic header" do
 		encodings = HTTP::Accept::Encodings.parse("gzip, deflate;q=0.5, identity;q=0.25")
 		
@@ -57,7 +57,7 @@ RSpec.describe HTTP::Accept::Encodings do
 			"gzip;f=1", "br;gzip",
 			";", ","
 		].each do |text|
-			expect{HTTP::Accept::Encodings.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Encodings.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
 	

@@ -5,7 +5,7 @@
 
 require 'http/accept/quoted_string'
 
-RSpec.describe HTTP::Accept::MediaTypes do
+describe HTTP::Accept::QuotedString do
 	it "should ignore linear whitespace" do
 		quoted_string = HTTP::Accept::QuotedString.unquote(%Q{"Hello\r\n  World"})
 		

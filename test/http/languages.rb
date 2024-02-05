@@ -6,7 +6,7 @@
 
 require 'http/accept/languages'
 
-RSpec.describe HTTP::Accept::Languages do
+describe HTTP::Accept::Languages do
 	it "should parse basic header" do
 		languages = HTTP::Accept::Languages.parse("da, en-gb;q=0.5, en;q=0.25")
 		
@@ -61,7 +61,7 @@ RSpec.describe HTTP::Accept::Languages do
 	it "should not accept quality factors with more than 6 decimal places" do
 		text = "en;q=0.1234567"
 
-		expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+		expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 	end
 	
 	it "should not accept invalid input" do
@@ -69,12 +69,12 @@ RSpec.describe HTTP::Accept::Languages do
 			"en;f=1", "de;jp",
 			";", ","
 		].each do |text|
-			expect{HTTP::Accept::Languages.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
 end
 
-RSpec.describe HTTP::Accept::Languages::Locales do
+describe HTTP::Accept::Languages::Locales do
 	# Specified by the server, content localizations that are actually available:
 	let(:locales) {HTTP::Accept::Languages::Locales.new(["en-us", "en-nz", "en-au"])}
 	
@@ -97,10 +97,10 @@ RSpec.describe HTTP::Accept::Languages::Locales do
 	end
 	
 	it "should include all generic locales" do
-		expect(locales).to be_include "en-us"
-		expect(locales).to be_include "en-nz"
-		expect(locales).to be_include "en-au"
-		expect(locales).to be_include "en"
+		expect(locales).to be(:include?, "en-us")
+		expect(locales).to be(:include?, "en-nz")
+		expect(locales).to be(:include?, "en-au")
+		expect(locales).to be(:include?, "en")
 	end
 	
 	it "can be joined into a string" do
@@ -109,8 +109,13 @@ RSpec.describe HTTP::Accept::Languages::Locales do
 	
 	it "can be added together" do
 		others = ['ja']
+		all_locales = locales + others
 		
-		expect(locales + others).to include('en', 'en-us', 'ja')
+		expect(all_locales).to be(:include?, "en-us")
+		expect(all_locales).to be(:include?, "en-nz")
+		expect(all_locales).to be(:include?, "en-au")
+		expect(all_locales).to be(:include?, "en")
+		expect(all_locales).to be(:include?, "ja")
 	end
 	
 	it "can be converted to an array of names" do

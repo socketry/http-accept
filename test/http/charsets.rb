@@ -6,14 +6,14 @@
 
 require 'http/accept/charsets'
 
-RSpec.describe HTTP::Accept::Charsets::Charset do
+describe HTTP::Accept::Charsets::Charset do
 	it "should have default quality_factor of 1.0" do
 		charset = HTTP::Accept::Charsets::Charset.new('utf-8', nil)
 		expect(charset.quality_factor).to be == 1.0
 	end
 end
 
-RSpec.describe HTTP::Accept::Charsets do
+describe HTTP::Accept::Charsets do
 	it "should parse basic header" do
 		charsets = HTTP::Accept::Charsets.parse("utf-8, iso-8859-1;q=0.5, windows-1252;q=0.25")
 		
@@ -57,7 +57,7 @@ RSpec.describe HTTP::Accept::Charsets do
 			"utf-8;f=1", "us-ascii;utf-8",
 			";", ","
 		].each do |text|
-			expect{HTTP::Accept::Charsets.parse(text)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Charsets.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
 	
@@ -73,7 +73,7 @@ RSpec.describe HTTP::Accept::Charsets do
 		
 		it "should treat a blank header as an error" do
 			env = {HTTP::Accept::Charsets::HTTP_ACCEPT_CHARSET => ""}
-			expect{HTTP::Accept::Charsets.browser_preferred_charsets(env)}.to raise_error(HTTP::Accept::ParseError)
+			expect{HTTP::Accept::Charsets.browser_preferred_charsets(env)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 		
 		it "should treat a missing header as '*'" do
