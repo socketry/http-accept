@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright, 2016-2022, by Samuel Williams.  
+Copyright, 2016-2024, by Samuel Williams.  
 Copyright, 2016, by Matthew Kerwin.  
 Copyright, 2016, by Alif Rachmawadi.  
 Copyright, 2017, by Andy Brody.  
