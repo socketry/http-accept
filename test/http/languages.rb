@@ -58,6 +58,10 @@ describe HTTP::Accept::Languages do
 		expect(languages[0].quality_factor).to be == 0.123456
 	end
 
+	it "should accept empty strings" do
+		expect(HTTP::Accept::Languages.parse("")).to be == []
+	end
+
 	it "should not accept quality factors with more than 6 decimal places" do
 		text = "en;q=0.1234567"
 
@@ -71,6 +75,10 @@ describe HTTP::Accept::Languages do
 		].each do |text|
 			expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
+	end
+
+	it "should not accept nil" do
+		expect{HTTP::Accept::Languages.parse(nil)}.to raise_exception(TypeError)
 	end
 end
 
