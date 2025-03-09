@@ -52,6 +52,10 @@ describe HTTP::Accept::Encodings do
 		expect(encodings[2].encoding).to be == "deflate"
 	end
 	
+	it "should accept empty string" do
+		expect(HTTP::Accept::Encodings.parse("")).to be == []
+	end
+
 	it "should not accept invalid input" do
 		[
 			"gzip;f=1", "br;gzip",
@@ -59,6 +63,10 @@ describe HTTP::Accept::Encodings do
 		].each do |text|
 			expect{HTTP::Accept::Encodings.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
+	end
+
+	it "should not accept nil input" do
+		expect{HTTP::Accept::Encodings.parse(nil)}.to raise_exception(TypeError)
 	end
 	
 	describe "browser_preferred_content_codings" do
