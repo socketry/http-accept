@@ -33,6 +33,10 @@ describe HTTP::Accept::MediaTypes do
 		expect(media_types[0].mime_type).to be == "foo/bar"
 		expect(media_types[0].parameters).to be == {'key' => "A,B,C"}
 	end
+
+	it "should accept empty string" do
+		expect(HTTP::Accept::MediaTypes.parse("")).to be == []
+	end
 	
 	it "should not accept invalid input" do
 		[
@@ -49,6 +53,10 @@ describe HTTP::Accept::MediaTypes do
 		].each do |text|
 			expect{HTTP::Accept::MediaTypes.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
+	end
+
+	it "should not accept nil input" do
+		expect{HTTP::Accept::MediaTypes.parse(nil)}.to raise_exception(TypeError)
 	end
 end
 
