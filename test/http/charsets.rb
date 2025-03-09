@@ -51,6 +51,10 @@ describe HTTP::Accept::Charsets do
 		expect(charsets[1].charset).to be == "iso-8859-1"
 		expect(charsets[2].charset).to be == "windows-1252"
 	end
+
+	it "should accept empty string" do
+		expect(HTTP::Accept::Charsets.parse("")).to be == []
+	end
 	
 	it "should not accept invalid input" do
 		[
@@ -59,6 +63,10 @@ describe HTTP::Accept::Charsets do
 		].each do |text|
 			expect{HTTP::Accept::Charsets.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
+	end
+
+	it "should not accept nil input" do
+		expect{HTTP::Accept::Charsets.parse(nil)}.to raise_exception(TypeError)
 	end
 	
 	describe "browser_preferred_charsets" do
