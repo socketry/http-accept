@@ -7,7 +7,7 @@ module HTTP
 	module Accept
 		# According to https://tools.ietf.org/html/rfc7231#appendix-C
 		TOKEN = /[!#$%&'*+\-.^_`|~0-9A-Z]+/i
-		QUOTED_STRING = /"(?:.(?!(?<!\\)"))*.?"/
+		QUOTED_STRING = /"(?:[^"\\\r\n]|\\.)*"/
 		
 		module QuotedString
 			# Unquote a "quoted-string" value according to https://tools.ietf.org/html/rfc7230#section-3.2.6
