@@ -34,6 +34,31 @@ describe HTTP::Accept::MediaTypes do
 		expect(media_types[0].parameters).to be == {'key' => "A,B,C"}
 	end
 
+	it "should not over-match a quoted value ending with an escaped backslash" do
+		# The QUOTED_STRING regex must stop at the real
+		# closing quote even when the value ends in an escaped backslash (\\).
+		# Otherwise it swallows the following parameters and media types, which
+		# raises a ParseError on this otherwise valid RFC 7230 header.
+		media_types = HTTP::Accept::MediaTypes.parse("text/html;a=\"\\\\\";q=0.5, text/plain;b=\"normal\"")
+
+		expect(media_types.size).to be == 2
+
+		expect(media_types[0].mime_type).to be == "text/plain"
+		expect(media_types[0].parameters).to be == {'b' => "normal"}
+
+		expect(media_types[1].mime_type).to be == "text/html"
+		expect(media_types[1].parameters).to be == {'a' => "\\", 'q' => "0.5"}
+	end
+
+	it "should reject line breaks inside quoted values" do
+		[
+			"foo/bar;x=\"line\rbreak\"",
+			"foo/bar;x=\"line\nbreak\"",
+		].each do |text|
+			expect{HTTP::Accept::MediaTypes.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
+		end
+	end
+
 	it "should accept empty string" do
 		expect(HTTP::Accept::MediaTypes.parse("")).to be == []
 	end
