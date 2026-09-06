@@ -4,10 +4,10 @@
 # Copyright, 2016-2024, by Samuel Williams.
 # Copyright, 2021, by Khaled Hassan Hussein.
 
-require 'strscan'
+require "strscan"
 
-require_relative 'parse_error'
-require_relative 'sort'
+require_relative "parse_error"
+require_relative "sort"
 
 module HTTP
 	module Accept
@@ -24,10 +24,10 @@ module HTTP
 			# Provides an efficient data-structure for matching the Accept-Languages header to set of available locales according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
 			class Locales
 				def self.expand(locale, into)
-					parts = locale.split('-')
+					parts = locale.split("-")
 					
 					while parts.size > 0
-						key = parts.join('-')
+						key = parts.join("-")
 						
 						into[key] ||= locale
 						

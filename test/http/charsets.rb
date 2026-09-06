@@ -5,11 +5,11 @@
 # Copyright, 2017-2024, by Samuel Williams.
 # Copyright, 2025, by Alexis Bernard.
 
-require 'http/accept/charsets'
+require "http/accept/charsets"
 
 describe HTTP::Accept::Charsets::Charset do
 	it "should have default quality_factor of 1.0" do
-		charset = HTTP::Accept::Charsets::Charset.new('utf-8', nil)
+		charset = HTTP::Accept::Charsets::Charset.new("utf-8", nil)
 		expect(charset.quality_factor).to be == 1.0
 	end
 end
@@ -52,7 +52,7 @@ describe HTTP::Accept::Charsets do
 		expect(charsets[1].charset).to be == "iso-8859-1"
 		expect(charsets[2].charset).to be == "windows-1252"
 	end
-
+	
 	it "should accept empty string" do
 		expect(HTTP::Accept::Charsets.parse("")).to be == []
 	end
@@ -65,7 +65,7 @@ describe HTTP::Accept::Charsets do
 			expect{HTTP::Accept::Charsets.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
-
+	
 	it "should not accept nil input" do
 		expect{HTTP::Accept::Charsets.parse(nil)}.to raise_exception(TypeError)
 	end

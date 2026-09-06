@@ -3,8 +3,8 @@
 # Released under the MIT License.
 # Copyright, 2016-2024, by Samuel Williams.
 
-require 'http/accept/media_types'
-require 'http/accept/languages'
+require "http/accept/media_types"
+require "http/accept/languages"
 
 describe HTTP::Accept::MediaTypes::Map do
 	let(:converter) do

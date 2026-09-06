@@ -4,11 +4,11 @@
 # Copyright, 2016, by Matthew Kerwin.
 # Copyright, 2017-2024, by Samuel Williams.
 
-require 'strscan'
+require "strscan"
 
-require_relative 'parse_error'
-require_relative 'quoted_string'
-require_relative 'sort'
+require_relative "parse_error"
+require_relative "quoted_string"
+require_relative "sort"
 
 module HTTP
 	module Accept
@@ -36,7 +36,7 @@ module HTTP
 						break unless scanner.scan(/\s*,\s*/)
 					end
 					
-					raise ParseError.new('Could not parse entire string!') unless scanner.eos?
+					raise ParseError.new("Could not parse entire string!") unless scanner.eos?
 				end
 			end
 			
@@ -48,9 +48,9 @@ module HTTP
 				return Sort.by_quality_factor(encodings)
 			end
 			
-			HTTP_ACCEPT_ENCODING = 'HTTP_ACCEPT_ENCODING'.freeze
-			WILDCARD_CONTENT_CODING = ContentCoding.new('*', nil).freeze
-			IDENTITY_CONTENT_CODING = ContentCoding.new('identity', nil).freeze
+			HTTP_ACCEPT_ENCODING = "HTTP_ACCEPT_ENCODING".freeze
+			WILDCARD_CONTENT_CODING = ContentCoding.new("*", nil).freeze
+			IDENTITY_CONTENT_CODING = ContentCoding.new("identity", nil).freeze
 			
 			# Parse the list of browser preferred content codings and return ordered by priority. If no
 			# `Accept-Encoding:` header is specified, the behaviour is the same as if

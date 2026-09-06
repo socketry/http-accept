@@ -17,7 +17,7 @@ I am concerned about correctness, security and performance. As such, I implement
 Add this line to your application's Gemfile:
 
 ``` ruby
-gem 'http-accept'
+gem "http-accept"
 ```
 
 And then execute:
@@ -31,7 +31,7 @@ Or install it yourself as:
 You can then require it in your code like so:
 
 ``` ruby
-require 'http/accept'
+require "http/accept"
 ```
 
 ## Usage
@@ -46,31 +46,31 @@ You can parse the incoming `Accept:` header:
 media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json; version=1")
 
 expect(media_types[0].mime_type).to be == "application/json"
-expect(media_types[0].parameters).to be == {'version' => '1'}
+expect(media_types[0].parameters).to be == {"version" => "1"}
 expect(media_types[1].mime_type).to be == "text/html"
-expect(media_types[1].parameters).to be == {'q' => '0.5'}
+expect(media_types[1].parameters).to be == {"q" => "0.5"}
 ```
 
 Normally, you'd want to match the media types against some set of available mime types:
 
 ``` ruby
 module ToJSON
-  def content_type
-    HTTP::Accept::ContentType.new("application", "json", charset: 'utf-8')
-  end
-
-  # Used for inserting into map.
-  def split(*args)
-    content_type.split(*args)
-  end
-
-  def convert(object, options)
-    object.to_json
-  end
+	def content_type
+		HTTP::Accept::ContentType.new("application", "json", charset: "utf-8")
+	end
+	
+	# Used for inserting into map.
+	def split(*args)
+		content_type.split(*args)
+	end
+	
+	def convert(object, options)
+		object.to_json
+	end
 end
 
 module ToXML
-  # Are you kidding?
+	# Are you kidding?
 end
 
 map = HTTP::Accept::MediaTypes::Map.new
@@ -79,7 +79,7 @@ map << ToXML
 
 object, media_range = map.for(media_types)
 content = object.convert(model, media_range.parameters)
-response = [200, {'Content-Type' => object.content_type}, [content]]
+response = [200, {"Content-Type" => object.content_type}, [content]]
 ```
 
 ### Parsing Accept-Language: headers

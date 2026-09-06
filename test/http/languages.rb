@@ -5,7 +5,7 @@
 # Copyright, 2021, by Khaled Hassan Hussein.
 # Copyright, 2025, by Alexis Bernard.
 
-require 'http/accept/languages'
+require "http/accept/languages"
 
 describe HTTP::Accept::Languages do
 	it "should parse basic header" do
@@ -51,21 +51,21 @@ describe HTTP::Accept::Languages do
 		expect(languages[1].locale).to be == "en-US"
 		expect(languages[2].locale).to be == "en"
 	end
-
+	
 	it "should accept quality factors up to 6 decimal places" do
 		languages = HTTP::Accept::Languages.parse("en;q=0.123456")
-
+		
 		expect(languages[0].locale).to be == "en"
 		expect(languages[0].quality_factor).to be == 0.123456
 	end
-
+	
 	it "should accept empty strings" do
 		expect(HTTP::Accept::Languages.parse("")).to be == []
 	end
-
+	
 	it "should not accept quality factors with more than 6 decimal places" do
 		text = "en;q=0.1234567"
-
+		
 		expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 	end
 	
@@ -77,7 +77,7 @@ describe HTTP::Accept::Languages do
 			expect{HTTP::Accept::Languages.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
-
+	
 	it "should not accept nil" do
 		expect{HTTP::Accept::Languages.parse(nil)}.to raise_exception(TypeError)
 	end
@@ -113,11 +113,11 @@ describe HTTP::Accept::Languages::Locales do
 	end
 	
 	it "can be joined into a string" do
-		expect(locales.join(',')).to be == "en-us,en-nz,en-au"
+		expect(locales.join(",")).to be == "en-us,en-nz,en-au"
 	end
 	
 	it "can be added together" do
-		others = ['ja']
+		others = ["ja"]
 		all_locales = locales + others
 		
 		expect(all_locales).to be(:include?, "en-us")

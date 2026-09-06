@@ -4,8 +4,8 @@
 # Copyright, 2016-2024, by Samuel Williams.
 # Copyright, 2025, by Alexis Bernard.
 
-require 'http/accept/media_types'
-require 'http/accept/content_type'
+require "http/accept/media_types"
+require "http/accept/content_type"
 
 describe HTTP::Accept::MediaTypes do
 	it "should parse basic header with multiple parameters" do
@@ -14,16 +14,16 @@ describe HTTP::Accept::MediaTypes do
 		expect(media_types[0].mime_type).to be == "application/json"
 		expect(media_types[0].parameters).to be == {}
 		expect(media_types[1].mime_type).to be == "text/html"
-		expect(media_types[1].parameters).to be == {'q' => '0.5'}
+		expect(media_types[1].parameters).to be == {"q" => "0.5"}
 	end
 	
 	it "should parse basic header with multiple parameters" do
 		media_types = HTTP::Accept::MediaTypes.parse("text/html;q=0.5, application/json;q=1.0; version=1")
 		
 		expect(media_types[0].mime_type).to be == "application/json"
-		expect(media_types[0].parameters).to be == {'q' => '1.0', 'version' => '1'}
+		expect(media_types[0].parameters).to be == {"q" => "1.0", "version" => "1"}
 		expect(media_types[1].mime_type).to be == "text/html"
-		expect(media_types[1].parameters).to be == {'q' => '0.5'}
+		expect(media_types[1].parameters).to be == {"q" => "0.5"}
 	end
 	
 	it "should parse quoted strings correctly" do
@@ -32,9 +32,9 @@ describe HTTP::Accept::MediaTypes do
 		
 		expect(media_types.size).to be == 1
 		expect(media_types[0].mime_type).to be == "foo/bar"
-		expect(media_types[0].parameters).to be == {'key' => "A,B,C"}
+		expect(media_types[0].parameters).to be == {"key" => "A,B,C"}
 	end
-
+	
 	it "should accept empty string" do
 		expect(HTTP::Accept::MediaTypes.parse("")).to be == []
 	end
@@ -55,7 +55,7 @@ describe HTTP::Accept::MediaTypes do
 			expect{HTTP::Accept::MediaTypes.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
-
+	
 	it "should not accept nil input" do
 		expect{HTTP::Accept::MediaTypes.parse(nil)}.to raise_exception(TypeError)
 	end
@@ -101,17 +101,17 @@ AWildcardMediaRange = Sus::Shared("a wildcard media range") do |env|
 end
 
 describe HTTP::Accept::MediaTypes do
-	it_behaves_like AWildcardMediaRange, {'HTTP_ACCEPT' => '   */*   '}
-	it_behaves_like AWildcardMediaRange, {'HTTP_ACCEPT' => '*/*'}
+	it_behaves_like AWildcardMediaRange, {"HTTP_ACCEPT" => "   */*   "}
+	it_behaves_like AWildcardMediaRange, {"HTTP_ACCEPT" => "*/*"}
 	
 	# http://stackoverflow.com/questions/12130910/how-to-interpret-empty-http-accept-header
-	it_behaves_like AWildcardMediaRange, {'HTTP_ACCEPT' => '   '}
-	it_behaves_like AWildcardMediaRange, {'HTTP_ACCEPT' => ''}
+	it_behaves_like AWildcardMediaRange, {"HTTP_ACCEPT" => "   "}
+	it_behaves_like AWildcardMediaRange, {"HTTP_ACCEPT" => ""}
 	
 	let(:text_plain_media_range) {HTTP::Accept::MediaTypes::MediaRange.new("text", "plain", {})}
 	
 	it "should parse accept header" do
-		media_types = HTTP::Accept::MediaTypes.browser_preferred_media_types('HTTP_ACCEPT' => text_plain_media_range.to_s)
+		media_types = HTTP::Accept::MediaTypes.browser_preferred_media_types("HTTP_ACCEPT" => text_plain_media_range.to_s)
 		
 		expect(media_types[0]).to be === text_plain_media_range
 	end

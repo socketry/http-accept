@@ -3,9 +3,9 @@
 # Released under the MIT License.
 # Copyright, 2016-2024, by Samuel Williams.
 
-require 'http/accept/media_types'
-require 'http/accept/media_types/map'
-require 'http/accept/content_type'
+require "http/accept/media_types"
+require "http/accept/media_types/map"
+require "http/accept/content_type"
 
 describe HTTP::Accept::MediaTypes::Map do
 	let(:converter) do
@@ -18,7 +18,7 @@ describe HTTP::Accept::MediaTypes::Map do
 	
 	let(:text_html_converter) {converter.new("text/html")}
 	
-	let(:text_plain_content_type) {HTTP::Accept::ContentType.new("text", "plain", charset: 'utf-8')}
+	let(:text_plain_content_type) {HTTP::Accept::ContentType.new("text", "plain", charset: "utf-8")}
 	let(:text_plain_converter) {converter.new(text_plain_content_type)}
 	
 	let(:map) {subject.new}

@@ -3,8 +3,8 @@
 # Released under the MIT License.
 # Copyright, 2016-2024, by Samuel Williams.
 
-require 'http/accept/media_types'
-require 'http/accept/content_type'
+require "http/accept/media_types"
+require "http/accept/content_type"
 
 describe HTTP::Accept::MediaTypes do
 	let(:json_content_type) {HTTP::Accept::ContentType.new("application", "json")}

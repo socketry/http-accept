@@ -4,11 +4,11 @@
 # Copyright, 2016, by Matthew Kerwin.
 # Copyright, 2017-2024, by Samuel Williams.
 
-require 'strscan'
+require "strscan"
 
-require_relative 'parse_error'
-require_relative 'quoted_string'
-require_relative 'sort'
+require_relative "parse_error"
+require_relative "quoted_string"
+require_relative "sort"
 
 module HTTP
 	module Accept
@@ -34,7 +34,7 @@ module HTTP
 						break unless scanner.scan(/\s*,\s*/)
 					end
 					
-					raise ParseError.new('Could not parse entire string!') unless scanner.eos?
+					raise ParseError.new("Could not parse entire string!") unless scanner.eos?
 				end
 			end
 			
@@ -46,8 +46,8 @@ module HTTP
 				return Sort.by_quality_factor(charsets)
 			end
 			
-			HTTP_ACCEPT_CHARSET = 'HTTP_ACCEPT_CHARSET'.freeze
-			WILDCARD_CHARSET = Charset.new('*', nil).freeze
+			HTTP_ACCEPT_CHARSET = "HTTP_ACCEPT_CHARSET".freeze
+			WILDCARD_CHARSET = Charset.new("*", nil).freeze
 			
 			# Parse the list of browser preferred charsets and return ordered by priority.
 			def self.browser_preferred_charsets(env)
@@ -58,7 +58,7 @@ module HTTP
 						#    Accept-Charset = 1#( ( charset / "*" ) [ weight ] )
 						#
 						# Because of the `1#` rule, an empty header value is not considered valid.
-						raise ParseError.new('Could not parse entire string!')
+						raise ParseError.new("Could not parse entire string!")
 					else
 						return HTTP::Accept::Charsets.parse(accept_charsets)
 					end

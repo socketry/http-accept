@@ -3,13 +3,13 @@
 # Released under the MIT License.
 # Copyright, 2016-2024, by Samuel Williams.
 
-require 'strscan'
+require "strscan"
 
-require_relative 'parse_error'
-require_relative 'quoted_string'
-require_relative 'sort'
+require_relative "parse_error"
+require_relative "quoted_string"
+require_relative "sort"
 
-require_relative 'media_types/map'
+require_relative "media_types/map"
 
 module HTTP
 	module Accept
@@ -21,12 +21,12 @@ module HTTP
 			
 			# A single entry in the Accept: header, which includes a mime type and associated parameters.
 			MediaRange = Struct.new(:type, :subtype, :parameters) do
-				def initialize(type, subtype = '*', parameters = {})
+				def initialize(type, subtype = "*", parameters = {})
 					super(type, subtype, parameters)
 				end
 				
 				def parameters_string
-					return '' if parameters == nil or parameters.empty?
+					return "" if parameters == nil or parameters.empty?
 					
 					parameters.collect do |key, value|
 						"; #{key.to_s}=#{QuotedString.quote(value.to_s)}"
@@ -52,7 +52,7 @@ module HTTP
 				alias to_str to_s
 				
 				def quality_factor
-					parameters.fetch('q', 1.0).to_f
+					parameters.fetch("q", 1.0).to_f
 				end
 				
 				def split(*args)
@@ -103,7 +103,7 @@ module HTTP
 				return Sort.by_quality_factor(media_types)
 			end
 			
-			HTTP_ACCEPT = 'HTTP_ACCEPT'.freeze
+			HTTP_ACCEPT = "HTTP_ACCEPT".freeze
 			WILDCARD_MEDIA_RANGE = MediaRange.new("*", "*", {}).freeze
 			
 			# Parse the list of browser preferred content types and return ordered by priority. If no `Accept:` header is specified, the behaviour is the same as if `Accept: */*` was provided (according to RFC).

@@ -5,11 +5,11 @@
 # Copyright, 2017-2024, by Samuel Williams.
 # Copyright, 2025, by Alexis Bernard.
 
-require 'http/accept/encodings'
+require "http/accept/encodings"
 
 describe HTTP::Accept::Encodings::ContentCoding do
 	it "should have default quality_factor of 1.0" do
-		encoding = HTTP::Accept::Encodings::ContentCoding.new('gzip', nil)
+		encoding = HTTP::Accept::Encodings::ContentCoding.new("gzip", nil)
 		expect(encoding.quality_factor).to be == 1.0
 	end
 end
@@ -56,7 +56,7 @@ describe HTTP::Accept::Encodings do
 	it "should accept empty string" do
 		expect(HTTP::Accept::Encodings.parse("")).to be == []
 	end
-
+	
 	it "should not accept invalid input" do
 		[
 			"gzip;f=1", "br;gzip",
@@ -65,7 +65,7 @@ describe HTTP::Accept::Encodings do
 			expect{HTTP::Accept::Encodings.parse(text)}.to raise_exception(HTTP::Accept::ParseError)
 		end
 	end
-
+	
 	it "should not accept nil input" do
 		expect{HTTP::Accept::Encodings.parse(nil)}.to raise_exception(TypeError)
 	end

@@ -27,8 +27,8 @@ module HTTP
 				def for(media_types)
 					media_types.each do |media_range|
 						mime_type = case media_range
-							when String then media_range
-							else media_range.mime_type
+						when String then media_range
+						else media_range.mime_type
 						end
 						
 						if object = @media_types[mime_type]
@@ -49,15 +49,15 @@ module HTTP
 				
 				# Add a converter to the collection. A converter can be anything that responds to #content_type. Objects will be considered in the order they are added, subsequent objects cannot override previously defined media types. `object` must respond to #split('/', 2) which should give the type and subtype.
 				def << object
-					type, subtype = object.split('/', 2)
+					type, subtype = object.split("/", 2)
 					
 					# We set the default if not specified already:
 					@media_types[WILDCARD] = object if @media_types.empty?
 					
-					if type != '*'
+					if type != "*"
 						@media_types["#{type}/*"] ||= object
 						
-						if subtype != '*'
+						if subtype != "*"
 							@media_types["#{type}/#{subtype}"] ||= object
 						end
 					end
