@@ -3,6 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2016, by Matthew Kerwin.
 # Copyright, 2017-2024, by Samuel Williams.
+# Copyright, 2025, by Alexis Bernard.
 
 require 'http/accept/encodings'
 

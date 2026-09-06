@@ -107,20 +107,40 @@ The `desired_localizations` in the example above is a subset of `available_local
 
 `HTTP::Accept::Languages::Locales` provides an efficient data-structure for matching the Accept-Languages header to set of available localizations according to <https://tools.ietf.org/html/rfc7231#section-5.3.5> and <https://tools.ietf.org/html/rfc4647#section-2.3>
 
+## Releases
+
+There are no documented releases.
+
 ## Contributing
 
 We welcome contributions to this project.
 
-1.  Fork it.
+1.  Fork the repository.
 2.  Create your feature branch (`git checkout -b my-new-feature`).
-3.  Commit your changes (`git commit -am 'Add some feature'`).
+3.  Commit your changes (`git commit -am 'Add some feature.'`).
 4.  Push to the branch (`git push origin my-new-feature`).
-5.  Create new Pull Request.
+5.  Create a new pull request.
+
+### Running Tests
+
+To run the test suite:
+
+``` bash
+$ bundle exec sus
+```
+
+### Making Releases
+
+To make a new release:
+
+``` bash
+$ bundle exec bake gem:release:patch # or minor or major
+```
 
 ### Developer Certificate of Origin
 
-This project uses the [Developer Certificate of Origin](https://developercertificate.org/). All contributors to this project must agree to this document to have their contributions accepted.
+In order to protect users of this project, we require all contributors to comply with the [Developer Certificate of Origin](https://developercertificate.org/). This ensures that all contributions are properly licensed and attributed.
 
-### Contributor Covenant
+### Community Guidelines
 
-This project is governed by the [Contributor Covenant](https://www.contributor-covenant.org/). All contributors and participants agree to abide by its terms.
+This project is best served by a collaborative and respectful environment. Treat each other professionally, respect differing viewpoints, and engage constructively. Harassment, discrimination, or harmful behavior is not tolerated. Communicate clearly, listen actively, and support one another. If any issues arise, please inform the project maintainers.

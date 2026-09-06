@@ -2,6 +2,7 @@
 
 # Released under the MIT License.
 # Copyright, 2016-2024, by Samuel Williams.
+# Copyright, 2025, by Alexis Bernard.
 
 require 'http/accept/media_types'
 require 'http/accept/content_type'

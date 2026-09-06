@@ -3,6 +3,7 @@
 # Released under the MIT License.
 # Copyright, 2016-2024, by Samuel Williams.
 # Copyright, 2021, by Khaled Hassan Hussein.
+# Copyright, 2025, by Alexis Bernard.
 
 require 'http/accept/languages'
 
