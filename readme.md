@@ -36,7 +36,7 @@ require "http/accept"
 
 ## Usage
 
-Here are some examples of how to parse various headers.
+Please see the [project documentation](https://github.com/ioquatix/http-accept) for more details.
 
 ### Parsing Accept: headers
 
@@ -109,7 +109,11 @@ The `desired_localizations` in the example above is a subset of `available_local
 
 ## Releases
 
-There are no documented releases.
+Please see the [project releases](https://github.com/ioquatix/http-acceptreleases/index) for all releases.
+
+### v2.2.2
+
+  - Fix handling of quoted strings.
 
 ## Contributing
 
