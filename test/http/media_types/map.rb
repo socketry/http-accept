@@ -68,4 +68,42 @@ describe HTTP::Accept::MediaTypes::Map do
 		
 		expect(map["*/*"]).to be == :test
 	end
+	
+	# The type and subtype tokens are case-insensitive: https://www.rfc-editor.org/rfc/rfc9110#section-8.3.1
+	it "should match media types case-insensitively" do
+		map << text_html_converter
+		map << text_plain_converter
+		
+		media_types = HTTP::Accept::MediaTypes.parse("TEXT/Plain")
+		expect(map.for(media_types).first).to be == text_plain_converter
+		expect(map.for(media_types).last).to be == media_types.first
+		
+		expect(map.for(["Text/*"]).first).to be == text_html_converter
+	end
+	
+	it "should match converters registered with mixed case" do
+		map << converter.new("Application/JSON")
+		
+		expect(map.for(["application/json"]).first.content_type).to be == "Application/JSON"
+	end
+	
+	it "should assign and retrieve media ranges case-insensitively" do
+		map["Text/HTML"] = :test
+		
+		expect(map["text/html"]).to be == :test
+	end
+	
+	it "should assign and retrieve media ranges by mime type" do
+		map[HTTP::Accept::MediaTypes::MediaRange.new("Text", "HTML")] = :test
+		
+		expect(map["text/html"]).to be == :test
+		expect(map[HTTP::Accept::ContentType.new("text", "html", "charset" => "utf-8")]).to be == :test
+		expect(map.for(HTTP::Accept::MediaTypes.parse("TEXT/HTML")).first).to be == :test
+	end
+	
+	it "should assign and retrieve other keys unchanged" do
+		map[:test] = :value
+		
+		expect(map[:test]).to be == :value
+	end
 end

@@ -21,10 +21,10 @@ module HTTP
 			# https://greenbytes.de/tech/webdav/rfc7231.html#quality.values
 			LANGUAGE_RANGE = /(?<locale>#{LOCALE})(\s*;\s*q=(?<q>#{QVALUE}))?/
 			
-			# Provides an efficient data-structure for matching the Accept-Languages header to set of available locales according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3
+			# Provides an efficient data-structure for matching the Accept-Languages header to set of available locales according to https://tools.ietf.org/html/rfc7231#section-5.3.5 and https://tools.ietf.org/html/rfc4647#section-2.3. Locales are matched case-insensitively according to https://www.rfc-editor.org/rfc/rfc5646#section-2.1.1
 			class Locales
 				def self.expand(locale, into)
-					parts = locale.split("-")
+					parts = locale.downcase.split("-")
 					
 					while parts.size > 0
 						key = parts.join("-")
@@ -62,11 +62,11 @@ module HTTP
 				
 				# Returns the intersection of others retaining order.
 				def & languages
-					languages.collect{|language_range| @patterns[language_range.locale]}.compact
+					languages.collect{|language_range| @patterns[language_range.locale.downcase]}.compact
 				end
 				
 				def include? locale_name
-					@patterns.include? locale_name
+					@patterns.include? locale_name.downcase
 				end
 				
 				def join(*args)
