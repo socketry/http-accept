@@ -134,4 +134,23 @@ describe HTTP::Accept::Languages::Locales do
 	it "can be enumerated using each" do
 		expect(locales.each.to_a).to be == locales.names
 	end
+	
+	# Language tags are case-insensitive: https://www.rfc-editor.org/rfc/rfc5646#section-2.1.1
+	it "should match requested locales case-insensitively" do
+		languages = HTTP::Accept::Languages.parse("EN-AU, En")
+		
+		expect(locales & languages).to be == ["en-au", "en-us"]
+	end
+	
+	it "should match available locales case-insensitively and return them as given" do
+		locales = HTTP::Accept::Languages::Locales.new(["en-NZ", "en-GB"])
+		languages = HTTP::Accept::Languages.parse("en-gb, en")
+		
+		expect(locales & languages).to be == ["en-GB", "en-NZ"]
+	end
+	
+	it "should check inclusion case-insensitively" do
+		expect(locales).to be(:include?, "EN-US")
+		expect(locales).to be(:include?, "EN")
+	end
 end
