@@ -141,3 +141,21 @@ describe HTTP::Accept::MediaTypes do
 		expect(media_types[0]).to be === text_plain_media_range
 	end
 end
+
+describe HTTP::Accept::MediaTypes do
+	# Parameter names are case-insensitive: https://www.rfc-editor.org/rfc/rfc9110#section-5.6.6
+	it "should treat the quality factor parameter name case-insensitively" do
+		media_types = HTTP::Accept::MediaTypes.parse("text/html;Q=0.1, application/json;q=0.5")
+		
+		expect(media_types[0].mime_type).to be == "application/json"
+		expect(media_types[0].quality_factor).to be == 0.5
+		expect(media_types[1].mime_type).to be == "text/html"
+		expect(media_types[1].quality_factor).to be == 0.1
+	end
+	
+	it "should normalize parameter names to lower case" do
+		media_types = HTTP::Accept::MediaTypes.parse("text/html;Charset=UTF-8;Q=0.5")
+		
+		expect(media_types[0].parameters).to be == {"charset" => "UTF-8", "q" => "0.5"}
+	end
+end

@@ -63,7 +63,8 @@ module HTTP
 					parameters = {}
 					
 					while scanner.scan(PARAMETER)
-						key = scanner[:key]
+						# Parameter names are case-insensitive: https://www.rfc-editor.org/rfc/rfc9110#section-5.6.6
+						key = scanner[:key].downcase
 						
 						# If the regular expression PARAMETER matched, it must be one of these two:
 						if value = scanner[:value]

@@ -17,7 +17,7 @@ module HTTP
 			QVALUE = /0(\.[0-9]{0,3})?|1(\.[0]{0,3})?/
 			
 			# https://tools.ietf.org/html/rfc7231#section-5.3.3
-			CHARSETS = /(?<charset>#{TOKEN})(;q=(?<q>#{QVALUE}))?/
+			CHARSETS = /(?<charset>#{TOKEN})(\s*;\s*q=(?<q>#{QVALUE}))?/i
 			
 			Charset = Struct.new(:charset, :q) do
 				def quality_factor

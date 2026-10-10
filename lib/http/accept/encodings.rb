@@ -19,7 +19,7 @@ module HTTP
 			# https://tools.ietf.org/html/rfc7231#section-5.3.1
 			QVALUE = /0(\.[0-9]{0,3})?|1(\.[0]{0,3})?/
 			
-			CODINGS = /(?<encoding>#{CONTENT_CODING})(;q=(?<q>#{QVALUE}))?/
+			CODINGS = /(?<encoding>#{CONTENT_CODING})(\s*;\s*q=(?<q>#{QVALUE}))?/i
 			
 			ContentCoding = Struct.new(:encoding, :q) do
 				def quality_factor
