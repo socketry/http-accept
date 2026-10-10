@@ -95,3 +95,15 @@ describe HTTP::Accept::Encodings do
 		end
 	end
 end
+
+describe HTTP::Accept::Encodings do
+	# "q=" is an ABNF string literal and therefore case-insensitive: https://www.rfc-editor.org/rfc/rfc5234#section-2.3
+	it "should treat the quality factor parameter name case-insensitively" do
+		encodings = HTTP::Accept::Encodings.parse("deflate;Q=0.5, gzip")
+		
+		expect(encodings[0].encoding).to be == "gzip"
+		expect(encodings[0].quality_factor).to be == 1.0
+		expect(encodings[1].encoding).to be == "deflate"
+		expect(encodings[1].quality_factor).to be == 0.5
+	end
+end
